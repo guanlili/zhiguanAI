@@ -55,6 +55,19 @@ export const Body_login_login_access_tokenSchema = {
     title: 'Body_login-login_access_token'
 } as const;
 
+export const Body_soe_import_soe_dataSchema = {
+    properties: {
+        file: {
+            type: 'string',
+            format: 'binary',
+            title: 'File'
+        }
+    },
+    type: 'object',
+    required: ['file'],
+    title: 'Body_soe-import_soe_data'
+} as const;
+
 export const HTTPValidationErrorSchema = {
     properties: {
         detail: {
@@ -866,6 +879,431 @@ export const RecruitmentAnnouncementsPublicSchema = {
     type: 'object',
     required: ['data', 'count'],
     title: 'RecruitmentAnnouncementsPublic'
+} as const;
+
+export const RegulatoryUnitCreateSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name',
+            description: '监管单位名称'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 1024
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description',
+            description: '描述'
+        },
+        level: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Level',
+            description: '级别'
+        }
+    },
+    type: 'object',
+    required: ['name'],
+    title: 'RegulatoryUnitCreate'
+} as const;
+
+export const RegulatoryUnitPublicSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name',
+            description: '监管单位名称'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 1024
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description',
+            description: '描述'
+        },
+        level: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Level',
+            description: '级别'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['name', 'id', 'created_at', 'updated_at'],
+    title: 'RegulatoryUnitPublic'
+} as const;
+
+export const RegulatoryUnitUpdateSchema = {
+    properties: {
+        name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Name'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 1024
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        level: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Level'
+        }
+    },
+    type: 'object',
+    title: 'RegulatoryUnitUpdate'
+} as const;
+
+export const RegulatoryUnitsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/RegulatoryUnitPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'RegulatoryUnitsPublic'
+} as const;
+
+export const SoeEnterpriseCreateSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name',
+            description: '企业名称'
+        },
+        website: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 512
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Website',
+            description: '官网链接'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description',
+            description: '企业简介'
+        },
+        deepseek_comment: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deepseek Comment',
+            description: 'Deepseek锐评'
+        },
+        category: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category',
+            description: '行业分类'
+        },
+        regulatory_unit_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Regulatory Unit Id',
+            description: '所属监管单位ID'
+        }
+    },
+    type: 'object',
+    required: ['name', 'regulatory_unit_id'],
+    title: 'SoeEnterpriseCreate'
+} as const;
+
+export const SoeEnterprisePublicSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name',
+            description: '企业名称'
+        },
+        website: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 512
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Website',
+            description: '官网链接'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description',
+            description: '企业简介'
+        },
+        deepseek_comment: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deepseek Comment',
+            description: 'Deepseek锐评'
+        },
+        category: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category',
+            description: '行业分类'
+        },
+        regulatory_unit_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Regulatory Unit Id',
+            description: '所属监管单位ID'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        },
+        regulatory_unit_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Regulatory Unit Name'
+        }
+    },
+    type: 'object',
+    required: ['name', 'regulatory_unit_id', 'id', 'created_at', 'updated_at'],
+    title: 'SoeEnterprisePublic'
+} as const;
+
+export const SoeEnterpriseUpdateSchema = {
+    properties: {
+        name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Name'
+        },
+        website: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 512
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Website'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        deepseek_comment: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deepseek Comment'
+        },
+        category: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category'
+        },
+        regulatory_unit_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Regulatory Unit Id'
+        }
+    },
+    type: 'object',
+    title: 'SoeEnterpriseUpdate'
+} as const;
+
+export const SoeEnterprisesPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/SoeEnterprisePublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'SoeEnterprisesPublic'
 } as const;
 
 export const TokenSchema = {

@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, SoeReadRegulatoryUnitsData, SoeReadRegulatoryUnitsResponse, SoeCreateRegulatoryUnitData, SoeCreateRegulatoryUnitResponse, SoeReadRegulatoryUnitData, SoeReadRegulatoryUnitResponse, SoeUpdateRegulatoryUnitData, SoeUpdateRegulatoryUnitResponse, SoeDeleteRegulatoryUnitData, SoeDeleteRegulatoryUnitResponse, SoeReadEnterprisesData, SoeReadEnterprisesResponse, SoeCreateEnterpriseData, SoeCreateEnterpriseResponse, SoeReadEnterpriseData, SoeReadEnterpriseResponse, SoeUpdateEnterpriseData, SoeUpdateEnterpriseResponse, SoeDeleteEnterpriseData, SoeDeleteEnterpriseResponse, SoeImportSoeDataData, SoeImportSoeDataResponse, SoeGetSoeImportTemplateResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class AnnouncementsService {
     /**
@@ -526,6 +526,262 @@ export class SchedulerService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/scheduler/status'
+        });
+    }
+}
+
+export class SoeService {
+    /**
+     * Read Regulatory Units
+     * Retrieve all regulatory units.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns RegulatoryUnitsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readRegulatoryUnits(data: SoeReadRegulatoryUnitsData = {}): CancelablePromise<SoeReadRegulatoryUnitsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/soe/regulatory-units',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Regulatory Unit
+     * Create new regulatory unit.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns RegulatoryUnitPublic Successful Response
+     * @throws ApiError
+     */
+    public static createRegulatoryUnit(data: SoeCreateRegulatoryUnitData): CancelablePromise<SoeCreateRegulatoryUnitResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/soe/regulatory-units',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Regulatory Unit
+     * Get regulatory unit by ID.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns RegulatoryUnitPublic Successful Response
+     * @throws ApiError
+     */
+    public static readRegulatoryUnit(data: SoeReadRegulatoryUnitData): CancelablePromise<SoeReadRegulatoryUnitResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/soe/regulatory-units/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Regulatory Unit
+     * Update a regulatory unit.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns RegulatoryUnitPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateRegulatoryUnit(data: SoeUpdateRegulatoryUnitData): CancelablePromise<SoeUpdateRegulatoryUnitResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/soe/regulatory-units/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Regulatory Unit
+     * Delete a regulatory unit.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteRegulatoryUnit(data: SoeDeleteRegulatoryUnitData): CancelablePromise<SoeDeleteRegulatoryUnitResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/soe/regulatory-units/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Enterprises
+     * Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @param data.regulatoryUnitId
+     * @returns SoeEnterprisesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readEnterprises(data: SoeReadEnterprisesData = {}): CancelablePromise<SoeReadEnterprisesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/soe/enterprises',
+            query: {
+                skip: data.skip,
+                limit: data.limit,
+                regulatory_unit_id: data.regulatoryUnitId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Enterprise
+     * Create new enterprise.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns SoeEnterprisePublic Successful Response
+     * @throws ApiError
+     */
+    public static createEnterprise(data: SoeCreateEnterpriseData): CancelablePromise<SoeCreateEnterpriseResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/soe/enterprises',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Enterprise
+     * Get enterprise by ID.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns SoeEnterprisePublic Successful Response
+     * @throws ApiError
+     */
+    public static readEnterprise(data: SoeReadEnterpriseData): CancelablePromise<SoeReadEnterpriseResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/soe/enterprises/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Enterprise
+     * Update an enterprise.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns SoeEnterprisePublic Successful Response
+     * @throws ApiError
+     */
+    public static updateEnterprise(data: SoeUpdateEnterpriseData): CancelablePromise<SoeUpdateEnterpriseResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/soe/enterprises/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Enterprise
+     * Delete an enterprise.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteEnterprise(data: SoeDeleteEnterpriseData): CancelablePromise<SoeDeleteEnterpriseResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/soe/enterprises/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Import Soe Data
+     * Import SOE data from CSV or Excel file.
+     * Expected columns: '企业名称', '官网', '简介', '行业分类', '监管单位', 'Deepseek锐评'
+     * @param data The data for the request.
+     * @param data.formData
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static importSoeData(data: SoeImportSoeDataData): CancelablePromise<SoeImportSoeDataResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/soe/import',
+            formData: data.formData,
+            mediaType: 'multipart/form-data',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Soe Import Template
+     * Download SOE import template.
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getSoeImportTemplate(): CancelablePromise<SoeGetSoeImportTemplateResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/soe/template'
         });
     }
 }

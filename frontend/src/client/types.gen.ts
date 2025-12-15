@@ -9,6 +9,10 @@ export type Body_login_login_access_token = {
     client_secret?: (string | null);
 };
 
+export type Body_soe_import_soe_data = {
+    file: (Blob | File);
+};
+
 export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
@@ -218,6 +222,122 @@ export type RecruitmentAnnouncementUpdate = {
     category?: (string | null);
 };
 
+export type RegulatoryUnitCreate = {
+    /**
+     * 监管单位名称
+     */
+    name: string;
+    /**
+     * 描述
+     */
+    description?: (string | null);
+    /**
+     * 级别
+     */
+    level?: (string | null);
+};
+
+export type RegulatoryUnitPublic = {
+    /**
+     * 监管单位名称
+     */
+    name: string;
+    /**
+     * 描述
+     */
+    description?: (string | null);
+    /**
+     * 级别
+     */
+    level?: (string | null);
+    id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type RegulatoryUnitsPublic = {
+    data: Array<RegulatoryUnitPublic>;
+    count: number;
+};
+
+export type RegulatoryUnitUpdate = {
+    name?: (string | null);
+    description?: (string | null);
+    level?: (string | null);
+};
+
+export type SoeEnterpriseCreate = {
+    /**
+     * 企业名称
+     */
+    name: string;
+    /**
+     * 官网链接
+     */
+    website?: (string | null);
+    /**
+     * 企业简介
+     */
+    description?: (string | null);
+    /**
+     * Deepseek锐评
+     */
+    deepseek_comment?: (string | null);
+    /**
+     * 行业分类
+     */
+    category?: (string | null);
+    /**
+     * 所属监管单位ID
+     */
+    regulatory_unit_id: string;
+};
+
+export type SoeEnterprisePublic = {
+    /**
+     * 企业名称
+     */
+    name: string;
+    /**
+     * 官网链接
+     */
+    website?: (string | null);
+    /**
+     * 企业简介
+     */
+    description?: (string | null);
+    /**
+     * Deepseek锐评
+     */
+    deepseek_comment?: (string | null);
+    /**
+     * 行业分类
+     */
+    category?: (string | null);
+    /**
+     * 所属监管单位ID
+     */
+    regulatory_unit_id: string;
+    id: string;
+    created_at: string;
+    updated_at: string;
+    regulatory_unit_name?: (string | null);
+};
+
+export type SoeEnterprisesPublic = {
+    data: Array<SoeEnterprisePublic>;
+    count: number;
+};
+
+export type SoeEnterpriseUpdate = {
+    name?: (string | null);
+    website?: (string | null);
+    description?: (string | null);
+    deepseek_comment?: (string | null);
+    category?: (string | null);
+    regulatory_unit_id?: (string | null);
+};
+
 export type Token = {
     access_token: string;
     token_type?: string;
@@ -419,6 +539,79 @@ export type SchedulerConfigureScheduleData = {
 export type SchedulerConfigureScheduleResponse = (unknown);
 
 export type SchedulerGetStatusResponse = (unknown);
+
+export type SoeReadRegulatoryUnitsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type SoeReadRegulatoryUnitsResponse = (RegulatoryUnitsPublic);
+
+export type SoeCreateRegulatoryUnitData = {
+    requestBody: RegulatoryUnitCreate;
+};
+
+export type SoeCreateRegulatoryUnitResponse = (RegulatoryUnitPublic);
+
+export type SoeReadRegulatoryUnitData = {
+    id: string;
+};
+
+export type SoeReadRegulatoryUnitResponse = (RegulatoryUnitPublic);
+
+export type SoeUpdateRegulatoryUnitData = {
+    id: string;
+    requestBody: RegulatoryUnitUpdate;
+};
+
+export type SoeUpdateRegulatoryUnitResponse = (RegulatoryUnitPublic);
+
+export type SoeDeleteRegulatoryUnitData = {
+    id: string;
+};
+
+export type SoeDeleteRegulatoryUnitResponse = (Message);
+
+export type SoeReadEnterprisesData = {
+    limit?: number;
+    regulatoryUnitId?: (string | null);
+    skip?: number;
+};
+
+export type SoeReadEnterprisesResponse = (SoeEnterprisesPublic);
+
+export type SoeCreateEnterpriseData = {
+    requestBody: SoeEnterpriseCreate;
+};
+
+export type SoeCreateEnterpriseResponse = (SoeEnterprisePublic);
+
+export type SoeReadEnterpriseData = {
+    id: string;
+};
+
+export type SoeReadEnterpriseResponse = (SoeEnterprisePublic);
+
+export type SoeUpdateEnterpriseData = {
+    id: string;
+    requestBody: SoeEnterpriseUpdate;
+};
+
+export type SoeUpdateEnterpriseResponse = (SoeEnterprisePublic);
+
+export type SoeDeleteEnterpriseData = {
+    id: string;
+};
+
+export type SoeDeleteEnterpriseResponse = (Message);
+
+export type SoeImportSoeDataData = {
+    formData: Body_soe_import_soe_data;
+};
+
+export type SoeImportSoeDataResponse = (Message);
+
+export type SoeGetSoeImportTemplateResponse = (unknown);
 
 export type UsersReadUsersData = {
     limit?: number;

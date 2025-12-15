@@ -210,3 +210,91 @@ class RecruitmentAnnouncementPublic(RecruitmentAnnouncementBase):
 class RecruitmentAnnouncementsPublic(SQLModel):
     data: list[RecruitmentAnnouncementPublic]
     count: int
+
+
+# =============== SOE Module Models (国央企扫盲) ===============
+
+
+# Shared properties for RegulatoryUnit
+class RegulatoryUnitBase(SQLModel):
+    name: str = Field(max_length=255, unique=True, description="监管单位名称")
+    description: str | None = Field(default=None, max_length=1024, description="描述")
+    level: str | None = Field(default=None, max_length=50, description="级别")
+
+
+# Properties to receive on creation
+class RegulatoryUnitCreate(RegulatoryUnitBase):
+    pass
+
+
+# Properties to receive on update
+class RegulatoryUnitUpdate(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    description: str | None = Field(default=None, max_length=1024)
+    level: str | None = Field(default=None, max_length=50)
+
+
+# Database model
+class RegulatoryUnit(RegulatoryUnitBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
+    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+    enterprises: list["SoeEnterprise"] = Relationship(back_populates="regulatory_unit", cascade_delete=True)
+
+
+# Properties to return via API
+class RegulatoryUnitPublic(RegulatoryUnitBase):
+    id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+
+
+class RegulatoryUnitsPublic(SQLModel):
+    data: list[RegulatoryUnitPublic]
+    count: int
+
+
+# Shared properties for SoeEnterprise
+class SoeEnterpriseBase(SQLModel):
+    name: str = Field(max_length=255, unique=True, description="企业名称")
+    website: str | None = Field(default=None, max_length=512, description="官网链接")
+    description: str | None = Field(default=None, max_length=2048, description="企业简介")
+    deepseek_comment: str | None = Field(default=None, max_length=2048, description="Deepseek锐评")
+    category: str | None = Field(default=None, max_length=100, description="行业分类")
+    regulatory_unit_id: uuid.UUID = Field(foreign_key="regulatoryunit.id", description="所属监管单位ID")
+
+
+# Properties to receive on creation
+class SoeEnterpriseCreate(SoeEnterpriseBase):
+    pass
+
+
+# Properties to receive on update
+class SoeEnterpriseUpdate(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    website: str | None = Field(default=None, max_length=512)
+    description: str | None = Field(default=None, max_length=2048)
+    deepseek_comment: str | None = Field(default=None, max_length=2048)
+    category: str | None = Field(default=None, max_length=100)
+    regulatory_unit_id: uuid.UUID | None = None
+
+
+# Database model
+class SoeEnterprise(SoeEnterpriseBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
+    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+    regulatory_unit: RegulatoryUnit | None = Relationship(back_populates="enterprises")
+
+
+# Properties to return via API
+class SoeEnterprisePublic(SoeEnterpriseBase):
+    id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+    regulatory_unit_name: str | None = None # Convenience field for frontend
+
+
+class SoeEnterprisesPublic(SQLModel):
+    data: list[SoeEnterprisePublic]
+    count: int

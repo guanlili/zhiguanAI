@@ -15,6 +15,7 @@ import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutSoeRouteImport } from './routes/_layout/soe'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutJobApplicationsRouteImport } from './routes/_layout/job-applications'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
@@ -48,6 +49,11 @@ const LayoutRoute = LayoutRouteImport.update({
 const LayoutIndexRoute = LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutSoeRoute = LayoutSoeRouteImport.update({
+  id: '/soe',
+  path: '/soe',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/items': typeof LayoutItemsRoute
   '/job-applications': typeof LayoutJobApplicationsRoute
   '/settings': typeof LayoutSettingsRoute
+  '/soe': typeof LayoutSoeRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesByTo {
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/items': typeof LayoutItemsRoute
   '/job-applications': typeof LayoutJobApplicationsRoute
   '/settings': typeof LayoutSettingsRoute
+  '/soe': typeof LayoutSoeRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/job-applications': typeof LayoutJobApplicationsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
+  '/_layout/soe': typeof LayoutSoeRoute
   '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/items'
     | '/job-applications'
     | '/settings'
+    | '/soe'
     | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/items'
     | '/job-applications'
     | '/settings'
+    | '/soe'
     | '/'
   id:
     | '__root__'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/_layout/items'
     | '/_layout/job-applications'
     | '/_layout/settings'
+    | '/_layout/soe'
     | '/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -206,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/soe': {
+      id: '/_layout/soe'
+      path: '/soe'
+      fullPath: '/soe'
+      preLoaderRoute: typeof LayoutSoeRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/settings': {
       id: '/_layout/settings'
       path: '/settings'
@@ -250,6 +269,7 @@ interface LayoutRouteChildren {
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutJobApplicationsRoute: typeof LayoutJobApplicationsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
+  LayoutSoeRoute: typeof LayoutSoeRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
@@ -259,6 +279,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutJobApplicationsRoute: LayoutJobApplicationsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
+  LayoutSoeRoute: LayoutSoeRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 
