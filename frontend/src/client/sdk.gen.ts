@@ -3,7 +3,118 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+
+export class AnnouncementsService {
+    /**
+     * Read Announcements
+     * Retrieve recruitment announcements.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns RecruitmentAnnouncementsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readAnnouncements(data: AnnouncementsReadAnnouncementsData = {}): CancelablePromise<AnnouncementsReadAnnouncementsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/announcements/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Announcement
+     * Create new recruitment announcement.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns RecruitmentAnnouncementPublic Successful Response
+     * @throws ApiError
+     */
+    public static createAnnouncement(data: AnnouncementsCreateAnnouncementData): CancelablePromise<AnnouncementsCreateAnnouncementResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/announcements/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Announcement
+     * Get recruitment announcement by ID.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns RecruitmentAnnouncementPublic Successful Response
+     * @throws ApiError
+     */
+    public static readAnnouncement(data: AnnouncementsReadAnnouncementData): CancelablePromise<AnnouncementsReadAnnouncementResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/announcements/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Announcement
+     * Update a recruitment announcement.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns RecruitmentAnnouncementPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateAnnouncement(data: AnnouncementsUpdateAnnouncementData): CancelablePromise<AnnouncementsUpdateAnnouncementResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/announcements/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Announcement
+     * Delete a recruitment announcement.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteAnnouncement(data: AnnouncementsDeleteAnnouncementData): CancelablePromise<AnnouncementsDeleteAnnouncementResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/announcements/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
 
 export class ItemsService {
     /**
@@ -355,6 +466,62 @@ export class PrivateService {
             errors: {
                 422: 'Validation Error'
             }
+        });
+    }
+}
+
+export class SchedulerService {
+    /**
+     * Run Now
+     * Trigger the crawler job immediately in the background.
+     * @param data The data for the request.
+     * @param data.days
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static runNow(data: SchedulerRunNowData = {}): CancelablePromise<SchedulerRunNowResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/scheduler/run-now',
+            query: {
+                days: data.days
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Configure Schedule
+     * Configure the crawler schedule.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static configureSchedule(data: SchedulerConfigureScheduleData): CancelablePromise<SchedulerConfigureScheduleResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/scheduler/configure',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Status
+     * Get scheduler status and next run time.
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getStatus(): CancelablePromise<SchedulerGetStatusResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/scheduler/status'
         });
     }
 }

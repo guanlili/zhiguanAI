@@ -165,3 +165,48 @@ class JobApplicationPublic(JobApplicationBase):
 class JobApplicationsPublic(SQLModel):
     data: list[JobApplicationPublic]
     count: int
+
+
+# =============== Recruitment Announcement (招聘简章) Models ===============
+
+
+# Shared properties for RecruitmentAnnouncement
+class RecruitmentAnnouncementBase(SQLModel):
+    title: str = Field(max_length=512, description="公告标题")
+    url: str = Field(max_length=1024, description="公告链接", unique=True)
+    publish_date: str | None = Field(default=None, max_length=50, description="发布日期")
+    source: str | None = Field(default=None, max_length=100, description="来源")
+    category: str | None = Field(default=None, max_length=100, description="分类")
+
+
+# Properties to receive on creation
+class RecruitmentAnnouncementCreate(RecruitmentAnnouncementBase):
+    pass
+
+
+# Properties to receive on update
+class RecruitmentAnnouncementUpdate(SQLModel):
+    title: str | None = Field(default=None, max_length=512)
+    url: str | None = Field(default=None, max_length=1024)
+    publish_date: str | None = Field(default=None, max_length=50)
+    source: str | None = Field(default=None, max_length=100)
+    category: str | None = Field(default=None, max_length=100)
+
+
+# Database model
+class RecruitmentAnnouncement(RecruitmentAnnouncementBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
+    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+
+
+# Properties to return via API
+class RecruitmentAnnouncementPublic(RecruitmentAnnouncementBase):
+    id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+
+
+class RecruitmentAnnouncementsPublic(SQLModel):
+    data: list[RecruitmentAnnouncementPublic]
+    count: int

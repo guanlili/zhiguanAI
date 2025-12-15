@@ -567,6 +567,33 @@ export const JobApplicationsPublicSchema = {
     title: 'JobApplicationsPublic'
 } as const;
 
+export const JobConfigSchema = {
+    properties: {
+        days: {
+            type: 'integer',
+            title: 'Days',
+            default: 7
+        },
+        hours: {
+            type: 'integer',
+            title: 'Hours',
+            default: 24
+        },
+        cron_hour: {
+            type: 'integer',
+            title: 'Cron Hour',
+            default: 2
+        },
+        type: {
+            type: 'string',
+            title: 'Type',
+            default: 'cron'
+        }
+    },
+    type: 'object',
+    title: 'JobConfig'
+} as const;
+
 export const MessageSchema = {
     properties: {
         message: {
@@ -620,6 +647,225 @@ export const PrivateUserCreateSchema = {
     type: 'object',
     required: ['email', 'password', 'full_name'],
     title: 'PrivateUserCreate'
+} as const;
+
+export const RecruitmentAnnouncementCreateSchema = {
+    properties: {
+        title: {
+            type: 'string',
+            maxLength: 512,
+            title: 'Title',
+            description: '公告标题'
+        },
+        url: {
+            type: 'string',
+            maxLength: 1024,
+            title: 'Url',
+            description: '公告链接'
+        },
+        publish_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Publish Date',
+            description: '发布日期'
+        },
+        source: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source',
+            description: '来源'
+        },
+        category: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category',
+            description: '分类'
+        }
+    },
+    type: 'object',
+    required: ['title', 'url'],
+    title: 'RecruitmentAnnouncementCreate'
+} as const;
+
+export const RecruitmentAnnouncementPublicSchema = {
+    properties: {
+        title: {
+            type: 'string',
+            maxLength: 512,
+            title: 'Title',
+            description: '公告标题'
+        },
+        url: {
+            type: 'string',
+            maxLength: 1024,
+            title: 'Url',
+            description: '公告链接'
+        },
+        publish_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Publish Date',
+            description: '发布日期'
+        },
+        source: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source',
+            description: '来源'
+        },
+        category: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category',
+            description: '分类'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['title', 'url', 'id', 'created_at', 'updated_at'],
+    title: 'RecruitmentAnnouncementPublic'
+} as const;
+
+export const RecruitmentAnnouncementUpdateSchema = {
+    properties: {
+        title: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 512
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Title'
+        },
+        url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 1024
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Url'
+        },
+        publish_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Publish Date'
+        },
+        source: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source'
+        },
+        category: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category'
+        }
+    },
+    type: 'object',
+    title: 'RecruitmentAnnouncementUpdate'
+} as const;
+
+export const RecruitmentAnnouncementsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/RecruitmentAnnouncementPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'RecruitmentAnnouncementsPublic'
 } as const;
 
 export const TokenSchema = {

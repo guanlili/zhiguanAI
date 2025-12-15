@@ -133,6 +133,13 @@ export type JobApplicationUpdate = {
     deadline?: (string | null);
 };
 
+export type JobConfig = {
+    days?: number;
+    hours?: number;
+    cron_hour?: number;
+    type?: string;
+};
+
 export type Message = {
     message: string;
 };
@@ -147,6 +154,68 @@ export type PrivateUserCreate = {
     password: string;
     full_name: string;
     is_verified?: boolean;
+};
+
+export type RecruitmentAnnouncementCreate = {
+    /**
+     * 公告标题
+     */
+    title: string;
+    /**
+     * 公告链接
+     */
+    url: string;
+    /**
+     * 发布日期
+     */
+    publish_date?: (string | null);
+    /**
+     * 来源
+     */
+    source?: (string | null);
+    /**
+     * 分类
+     */
+    category?: (string | null);
+};
+
+export type RecruitmentAnnouncementPublic = {
+    /**
+     * 公告标题
+     */
+    title: string;
+    /**
+     * 公告链接
+     */
+    url: string;
+    /**
+     * 发布日期
+     */
+    publish_date?: (string | null);
+    /**
+     * 来源
+     */
+    source?: (string | null);
+    /**
+     * 分类
+     */
+    category?: (string | null);
+    id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type RecruitmentAnnouncementsPublic = {
+    data: Array<RecruitmentAnnouncementPublic>;
+    count: number;
+};
+
+export type RecruitmentAnnouncementUpdate = {
+    title?: (string | null);
+    url?: (string | null);
+    publish_date?: (string | null);
+    source?: (string | null);
+    category?: (string | null);
 };
 
 export type Token = {
@@ -204,6 +273,38 @@ export type ValidationError = {
     msg: string;
     type: string;
 };
+
+export type AnnouncementsReadAnnouncementsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type AnnouncementsReadAnnouncementsResponse = (RecruitmentAnnouncementsPublic);
+
+export type AnnouncementsCreateAnnouncementData = {
+    requestBody: RecruitmentAnnouncementCreate;
+};
+
+export type AnnouncementsCreateAnnouncementResponse = (RecruitmentAnnouncementPublic);
+
+export type AnnouncementsReadAnnouncementData = {
+    id: string;
+};
+
+export type AnnouncementsReadAnnouncementResponse = (RecruitmentAnnouncementPublic);
+
+export type AnnouncementsUpdateAnnouncementData = {
+    id: string;
+    requestBody: RecruitmentAnnouncementUpdate;
+};
+
+export type AnnouncementsUpdateAnnouncementResponse = (RecruitmentAnnouncementPublic);
+
+export type AnnouncementsDeleteAnnouncementData = {
+    id: string;
+};
+
+export type AnnouncementsDeleteAnnouncementResponse = (Message);
 
 export type ItemsReadItemsData = {
     limit?: number;
@@ -302,6 +403,20 @@ export type PrivateCreateUserData = {
 };
 
 export type PrivateCreateUserResponse = (UserPublic);
+
+export type SchedulerRunNowData = {
+    days?: number;
+};
+
+export type SchedulerRunNowResponse = (unknown);
+
+export type SchedulerConfigureScheduleData = {
+    requestBody: JobConfig;
+};
+
+export type SchedulerConfigureScheduleResponse = (unknown);
+
+export type SchedulerGetStatusResponse = (unknown);
 
 export type UsersReadUsersData = {
     limit?: number;
