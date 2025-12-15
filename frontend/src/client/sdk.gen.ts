@@ -12,6 +12,8 @@ export class AnnouncementsService {
      * @param data The data for the request.
      * @param data.skip
      * @param data.limit
+     * @param data.source
+     * @param data.category
      * @returns RecruitmentAnnouncementsPublic Successful Response
      * @throws ApiError
      */
@@ -21,7 +23,9 @@ export class AnnouncementsService {
             url: '/api/v1/announcements/',
             query: {
                 skip: data.skip,
-                limit: data.limit
+                limit: data.limit,
+                source: data.source,
+                category: data.category
             },
             errors: {
                 422: 'Validation Error'

@@ -275,8 +275,10 @@ export type ValidationError = {
 };
 
 export type AnnouncementsReadAnnouncementsData = {
+    category?: (string | null);
     limit?: number;
     skip?: number;
+    source?: (string | null);
 };
 
 export type AnnouncementsReadAnnouncementsResponse = (RecruitmentAnnouncementsPublic);

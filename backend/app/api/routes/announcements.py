@@ -20,14 +20,26 @@ router = APIRouter(prefix="/announcements", tags=["announcements"])
 
 @router.get("/", response_model=RecruitmentAnnouncementsPublic)
 def read_announcements(
-    session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
+    session: SessionDep, 
+    current_user: CurrentUser, 
+    skip: int = 0, 
+    limit: int = 100,
+    source: str | None = None,
+    category: str | None = None,
 ) -> Any:
     """
     Retrieve recruitment announcements.
     """
-    count_statement = select(func.count()).select_from(RecruitmentAnnouncement)
+    query = select(RecruitmentAnnouncement)
+    if source:
+        query = query.where(RecruitmentAnnouncement.source == source)
+    if category:
+        query = query.where(RecruitmentAnnouncement.category == category)
+
+    count_statement = select(func.count()).select_from(query.subquery())
     count = session.exec(count_statement).one()
-    statement = select(RecruitmentAnnouncement).offset(skip).limit(limit).order_by(RecruitmentAnnouncement.publish_date.desc())
+    
+    statement = query.offset(skip).limit(limit).order_by(RecruitmentAnnouncement.publish_date.desc())
     announcements = session.exec(statement).all()
 
     return RecruitmentAnnouncementsPublic(data=announcements, count=count)
