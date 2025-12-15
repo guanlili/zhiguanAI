@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Trash2, Pencil } from "lucide-react"
 import { RegulatoryUnitPublic } from "@/client"
 import { Button } from "@/components/ui/button"
+import { LongTextCell } from "@/components/Common/LongTextCell"
 
 interface ColumnsProps {
     onEdit: (unit: RegulatoryUnitPublic) => void
@@ -24,8 +25,13 @@ export const getRegulatoryUnitColumns = ({ onEdit, onDelete }: ColumnsProps): Co
     },
     {
         accessorKey: "description",
-        header: "描述",
-        cell: ({ row }) => <div className="max-w-[300px] truncate" title={row.getValue("description")}>{row.getValue("description") || "-"}</div>,
+        header: "简介",
+        cell: ({ row }) => <LongTextCell content={row.getValue("description")} maxLength={15} />,
+    },
+    {
+        accessorKey: "deepseek_comment",
+        header: "Deepseek锐评",
+        cell: ({ row }) => <LongTextCell content={row.getValue("deepseek_comment")} maxLength={15} />,
     },
     {
         id: "actions",

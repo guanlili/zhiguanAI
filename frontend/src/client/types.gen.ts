@@ -228,9 +228,13 @@ export type RegulatoryUnitCreate = {
      */
     name: string;
     /**
-     * 描述
+     * 简介
      */
     description?: (string | null);
+    /**
+     * Deepseek锐评
+     */
+    deepseek_comment?: (string | null);
     /**
      * 级别
      */
@@ -243,9 +247,13 @@ export type RegulatoryUnitPublic = {
      */
     name: string;
     /**
-     * 描述
+     * 简介
      */
     description?: (string | null);
+    /**
+     * Deepseek锐评
+     */
+    deepseek_comment?: (string | null);
     /**
      * 级别
      */
@@ -263,6 +271,7 @@ export type RegulatoryUnitsPublic = {
 export type RegulatoryUnitUpdate = {
     name?: (string | null);
     description?: (string | null);
+    deepseek_comment?: (string | null);
     level?: (string | null);
 };
 

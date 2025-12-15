@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { ExternalLink, Trash2, Pencil } from "lucide-react"
 import { SoeEnterprisePublic } from "@/client"
 import { Button } from "@/components/ui/button"
+import { LongTextCell } from "@/components/Common/LongTextCell"
 
 interface ColumnsProps {
     onEdit: (enterprise: SoeEnterprisePublic) => void
@@ -49,7 +50,7 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<SoeEnt
     {
         accessorKey: "deepseek_comment",
         header: "Deepseek锐评",
-        cell: ({ row }) => <div className="max-w-[200px] truncate" title={row.getValue("deepseek_comment")}>{row.getValue("deepseek_comment") || "-"}</div>,
+        cell: ({ row }) => <LongTextCell content={row.getValue("deepseek_comment")} maxLength={15} />,
     },
     {
         id: "actions",

@@ -900,7 +900,20 @@ export const RegulatoryUnitCreateSchema = {
                 }
             ],
             title: 'Description',
-            description: '描述'
+            description: '简介'
+        },
+        deepseek_comment: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deepseek Comment',
+            description: 'Deepseek锐评'
         },
         level: {
             anyOf: [
@@ -940,7 +953,20 @@ export const RegulatoryUnitPublicSchema = {
                 }
             ],
             title: 'Description',
-            description: '描述'
+            description: '简介'
+        },
+        deepseek_comment: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deepseek Comment',
+            description: 'Deepseek锐评'
         },
         level: {
             anyOf: [
@@ -1001,6 +1027,18 @@ export const RegulatoryUnitUpdateSchema = {
                 }
             ],
             title: 'Description'
+        },
+        deepseek_comment: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deepseek Comment'
         },
         level: {
             anyOf: [

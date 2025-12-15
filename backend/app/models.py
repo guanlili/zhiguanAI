@@ -218,7 +218,8 @@ class RecruitmentAnnouncementsPublic(SQLModel):
 # Shared properties for RegulatoryUnit
 class RegulatoryUnitBase(SQLModel):
     name: str = Field(max_length=255, unique=True, description="监管单位名称")
-    description: str | None = Field(default=None, max_length=1024, description="描述")
+    description: str | None = Field(default=None, max_length=1024, description="简介")
+    deepseek_comment: str | None = Field(default=None, max_length=2048, description="Deepseek锐评")
     level: str | None = Field(default=None, max_length=50, description="级别")
 
 
@@ -231,6 +232,7 @@ class RegulatoryUnitCreate(RegulatoryUnitBase):
 class RegulatoryUnitUpdate(SQLModel):
     name: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, max_length=1024)
+    deepseek_comment: str | None = Field(default=None, max_length=2048)
     level: str | None = Field(default=None, max_length=50)
 
 

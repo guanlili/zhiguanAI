@@ -26,13 +26,6 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { useEffect } from "react"
 import { handleError } from "@/utils"
 
-const schema = z.object({
-    name: z.string().min(1, "单位名称不能为空"),
-    description: z.string().optional(),
-    level: z.string().optional(),
-})
-
-type FormValues = z.infer<typeof schema>
 
 interface RegulatoryUnitDialogProps {
     open: boolean
@@ -45,11 +38,21 @@ export function RegulatoryUnitDialog({ open, onOpenChange, unit }: RegulatoryUni
     const { showSuccessToast, showErrorToast } = useCustomToast()
     const isEditing = !!unit
 
+    const schema = z.object({
+        name: z.string().min(1, "单位名称不能为空"),
+        description: z.string().optional(),
+        deepseek_comment: z.string().optional(),
+        level: z.string().optional(),
+    })
+
+    type FormValues = z.infer<typeof schema>
+
     const form = useForm<FormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             name: "",
             description: "",
+            deepseek_comment: "",
             level: "",
         },
     })
@@ -60,12 +63,14 @@ export function RegulatoryUnitDialog({ open, onOpenChange, unit }: RegulatoryUni
                 form.reset({
                     name: unit.name,
                     description: unit.description || "",
+                    deepseek_comment: unit.deepseek_comment || "",
                     level: unit.level || "",
                 })
             } else {
                 form.reset({
                     name: "",
                     description: "",
+                    deepseek_comment: "",
                     level: "",
                 })
             }
@@ -77,6 +82,7 @@ export function RegulatoryUnitDialog({ open, onOpenChange, unit }: RegulatoryUni
             const data = {
                 ...values,
                 description: values.description || null,
+                deepseek_comment: values.deepseek_comment || null,
                 level: values.level || null,
             }
             if (isEditing) {
@@ -141,9 +147,22 @@ export function RegulatoryUnitDialog({ open, onOpenChange, unit }: RegulatoryUni
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>描述</FormLabel>
+                                    <FormLabel>简介</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="描述..." {...field} />
+                                        <Textarea placeholder="简介..." {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="deepseek_comment"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Deepseek锐评</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Deepseek锐评..." className="min-h-[100px]" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
