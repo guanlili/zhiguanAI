@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -112,6 +112,130 @@ export class ItemsService {
             errors: {
                 422: 'Validation Error'
             }
+        });
+    }
+}
+
+export class JobApplicationsService {
+    /**
+     * Read Job Applications
+     * Retrieve all job applications (网申表格).
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns JobApplicationsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readJobApplications(data: JobApplicationsReadJobApplicationsData = {}): CancelablePromise<JobApplicationsReadJobApplicationsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/job-applications/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Job Application
+     * Create new job application.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns JobApplicationPublic Successful Response
+     * @throws ApiError
+     */
+    public static createJobApplication(data: JobApplicationsCreateJobApplicationData): CancelablePromise<JobApplicationsCreateJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/job-applications/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Job Application
+     * Get job application by ID.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns JobApplicationPublic Successful Response
+     * @throws ApiError
+     */
+    public static readJobApplication(data: JobApplicationsReadJobApplicationData): CancelablePromise<JobApplicationsReadJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/job-applications/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Job Application
+     * Update a job application.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns JobApplicationPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateJobApplication(data: JobApplicationsUpdateJobApplicationData): CancelablePromise<JobApplicationsUpdateJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/job-applications/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Job Application
+     * Delete a job application.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteJobApplication(data: JobApplicationsDeleteJobApplicationData): CancelablePromise<JobApplicationsDeleteJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/job-applications/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Init Mock Data
+     * Initialize mock data for job applications (用于测试的 mock 数据).
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static initMockData(): CancelablePromise<JobApplicationsInitMockDataResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/job-applications/init-mock-data'
         });
     }
 }

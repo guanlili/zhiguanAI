@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
@@ -111,3 +112,56 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=128)
+
+
+# =============== Job Application (网申表格) Models ===============
+
+
+# Shared properties for JobApplication
+class JobApplicationBase(SQLModel):
+    company_name: str = Field(max_length=255, description="公司名称")
+    announcement_url: str | None = Field(default=None, max_length=1024, description="公告链接")
+    apply_url: str | None = Field(default=None, max_length=1024, description="投递链接")
+    industry: str | None = Field(default=None, max_length=100, description="行业")
+    tags: str | None = Field(default=None, max_length=500, description="标签")
+    batch: str | None = Field(default=None, max_length=100, description="批次")
+    position: str | None = Field(default=None, max_length=255, description="职位")
+    location: str | None = Field(default=None, max_length=255, description="地点")
+    deadline: datetime | None = Field(default=None, description="投递截止时间")
+
+
+# Properties to receive on job application creation
+class JobApplicationCreate(JobApplicationBase):
+    pass
+
+
+# Properties to receive on job application update
+class JobApplicationUpdate(SQLModel):
+    company_name: str | None = Field(default=None, max_length=255)
+    announcement_url: str | None = Field(default=None, max_length=1024)
+    apply_url: str | None = Field(default=None, max_length=1024)
+    industry: str | None = Field(default=None, max_length=100)
+    tags: str | None = Field(default=None, max_length=500)
+    batch: str | None = Field(default=None, max_length=100)
+    position: str | None = Field(default=None, max_length=255)
+    location: str | None = Field(default=None, max_length=255)
+    deadline: datetime | None = None
+
+
+# Database model for JobApplication
+class JobApplication(JobApplicationBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
+    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+
+
+# Properties to return via API
+class JobApplicationPublic(JobApplicationBase):
+    id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+
+
+class JobApplicationsPublic(SQLModel):
+    data: list[JobApplicationPublic]
+    count: int

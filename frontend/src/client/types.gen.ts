@@ -35,6 +35,104 @@ export type ItemUpdate = {
     description?: (string | null);
 };
 
+export type JobApplicationCreate = {
+    /**
+     * 公司名称
+     */
+    company_name: string;
+    /**
+     * 公告链接
+     */
+    announcement_url?: (string | null);
+    /**
+     * 投递链接
+     */
+    apply_url?: (string | null);
+    /**
+     * 行业
+     */
+    industry?: (string | null);
+    /**
+     * 标签
+     */
+    tags?: (string | null);
+    /**
+     * 批次
+     */
+    batch?: (string | null);
+    /**
+     * 职位
+     */
+    position?: (string | null);
+    /**
+     * 地点
+     */
+    location?: (string | null);
+    /**
+     * 投递截止时间
+     */
+    deadline?: (string | null);
+};
+
+export type JobApplicationPublic = {
+    /**
+     * 公司名称
+     */
+    company_name: string;
+    /**
+     * 公告链接
+     */
+    announcement_url?: (string | null);
+    /**
+     * 投递链接
+     */
+    apply_url?: (string | null);
+    /**
+     * 行业
+     */
+    industry?: (string | null);
+    /**
+     * 标签
+     */
+    tags?: (string | null);
+    /**
+     * 批次
+     */
+    batch?: (string | null);
+    /**
+     * 职位
+     */
+    position?: (string | null);
+    /**
+     * 地点
+     */
+    location?: (string | null);
+    /**
+     * 投递截止时间
+     */
+    deadline?: (string | null);
+    id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type JobApplicationsPublic = {
+    data: Array<JobApplicationPublic>;
+    count: number;
+};
+
+export type JobApplicationUpdate = {
+    company_name?: (string | null);
+    announcement_url?: (string | null);
+    apply_url?: (string | null);
+    industry?: (string | null);
+    tags?: (string | null);
+    batch?: (string | null);
+    position?: (string | null);
+    location?: (string | null);
+    deadline?: (string | null);
+};
+
 export type Message = {
     message: string;
 };
@@ -138,6 +236,40 @@ export type ItemsDeleteItemData = {
 };
 
 export type ItemsDeleteItemResponse = (Message);
+
+export type JobApplicationsReadJobApplicationsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type JobApplicationsReadJobApplicationsResponse = (JobApplicationsPublic);
+
+export type JobApplicationsCreateJobApplicationData = {
+    requestBody: JobApplicationCreate;
+};
+
+export type JobApplicationsCreateJobApplicationResponse = (JobApplicationPublic);
+
+export type JobApplicationsReadJobApplicationData = {
+    id: string;
+};
+
+export type JobApplicationsReadJobApplicationResponse = (JobApplicationPublic);
+
+export type JobApplicationsUpdateJobApplicationData = {
+    id: string;
+    requestBody: JobApplicationUpdate;
+};
+
+export type JobApplicationsUpdateJobApplicationResponse = (JobApplicationPublic);
+
+export type JobApplicationsDeleteJobApplicationData = {
+    id: string;
+};
+
+export type JobApplicationsDeleteJobApplicationResponse = (Message);
+
+export type JobApplicationsInitMockDataResponse = (Message);
 
 export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;
