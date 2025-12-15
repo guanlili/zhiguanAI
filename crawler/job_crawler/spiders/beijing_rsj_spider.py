@@ -7,9 +7,9 @@ import scrapy
 import subprocess
 from scrapy.http import HtmlResponse
 import re
-from datetime import datetime, timedelta
+from .base_spider import BaseGovJobSpider
 
-class BeijingRsjSpider(scrapy.Spider):
+class BeijingRsjSpider(BaseGovJobSpider):
     name = "beijing_rsj"
     start_urls = ["https://rsj.beijing.gov.cn/xxgk/gkzp/index.html"]
     
@@ -18,14 +18,7 @@ class BeijingRsjSpider(scrapy.Spider):
         "CONCURRENT_REQUESTS": 1,
     }
 
-    def __init__(self, days=None, *args, **kwargs):
-        super(BeijingRsjSpider, self).__init__(*args, **kwargs)
-        self.days = int(days) if days else None
-        if self.days:
-            self.cutoff_date = datetime.now() - timedelta(days=self.days)
-            self.logger.info(f"Only crawling items published after {self.cutoff_date.strftime('%Y-%m-%d')}")
-        else:
-            self.cutoff_date = None
+    # Inherits __init__ from BaseGovJobSpider
 
     def start_requests(self):
         # Due to SSL/TLS issues with Python/Twisted on this environment for this specific site,
@@ -46,7 +39,7 @@ class BeijingRsjSpider(scrapy.Spider):
             response = HtmlResponse(url=current_url, body=content, encoding='utf-8')
             
             # Check if we got a valid page (not a 404 disguised as 200, though curl -f helps)
-            if response.status != 200 and response.status != 0: # 0 because HtmlResponse defaults to 200 usually, but let's be safe
+            if response.status != 200 and response.status != 0: 
                 break
                 
             items = list(self.parse_items(response))
@@ -56,7 +49,8 @@ class BeijingRsjSpider(scrapy.Spider):
                 
             should_continue = True
             for item in items:
-                if self.should_stop_crawl(item):
+                # Use base class method to check date
+                if self.should_stop_crawl(item.get("publish_date")):
                     should_continue = False
                     break
                 yield item
@@ -68,26 +62,6 @@ class BeijingRsjSpider(scrapy.Spider):
             page_count += 1
             next_url = self.get_next_url(current_url)
             current_url = next_url
-
-    def should_stop_crawl(self, item):
-        if not self.cutoff_date:
-            return False
-            
-        date_str = item.get("publish_date")
-        if not date_str:
-            return False
-            
-        try:
-            # Try to parse date in YYYY-MM-DD format
-            item_date = datetime.strptime(date_str, "%Y-%m-%d")
-            # If item_date is older than cutoff_date (item_date < cutoff_date), we can stop 
-            # assuming the list is ordered by date descending.
-            if item_date < self.cutoff_date:
-                return True
-        except ValueError:
-            pass
-            
-        return False
 
     def fetch_with_curl(self, url):
         try:
@@ -134,7 +108,7 @@ class BeijingRsjSpider(scrapy.Spider):
                 date = li.css("span::text").get()
                 
                 yield {
-                    "title": title.strip(),
+                    "title": self.clean_title(title),
                     "url": url,
                     "publish_date": date.strip() if date else "",
                     "source": "北京市人力资源和社会保障局",

@@ -6,9 +6,9 @@
 import scrapy
 from scrapy_playwright.page import PageMethod
 import re
-from datetime import datetime, timedelta
+from .base_spider import BaseGovJobSpider
 
-class MohrssSpider(scrapy.Spider):
+class MohrssSpider(BaseGovJobSpider):
     name = "mohrss"
     allowed_domains = ["mohrss.gov.cn"]
     # Provide index.html explicitly to match pattern logic
@@ -27,14 +27,7 @@ class MohrssSpider(scrapy.Spider):
         },
     }
 
-    def __init__(self, days=None, *args, **kwargs):
-        super(MohrssSpider, self).__init__(*args, **kwargs)
-        self.days = int(days) if days else None
-        if self.days:
-            self.cutoff_date = datetime.now() - timedelta(days=self.days)
-            self.logger.info(f"Only crawling items published after {self.cutoff_date.strftime('%Y-%m-%d')}")
-        else:
-            self.cutoff_date = None
+    # Inherits __init__ from BaseGovJobSpider
 
     def start_requests(self):
         for url in self.start_urls:
@@ -80,25 +73,20 @@ class MohrssSpider(scrapy.Spider):
             should_continue = True
             for job in jobs_data:
                 item = {
-                    "title": job.get("title", ""),
+                    "title": self.clean_title(job.get("title", "")),
                     "url": job.get("url", ""),
                     "publish_date": job.get("date", ""),
                     "source": "人力资源和社会保障部",
                     "category": "中央和国家机关事业单位公开招聘"
                 }
 
-                if self.should_stop_crawl(item):
+                if self.should_stop_crawl(item.get("publish_date")):
                     should_continue = False
-                    continue # Stop processing this item
+                    continue 
                 yield item
             
             # Pagination Logic
             if should_continue:
-                # Pattern: index.html -> index_1.html
-                # Check for "下一页" link availability via JS
-                # Or just construct URL if we are confident.
-                # MOHRSS pagination is index_1.html, index_2.html etc.
-                
                 # Check if next button/link exists
                 has_next = await page.evaluate("""
                     () => {
@@ -108,7 +96,7 @@ class MohrssSpider(scrapy.Spider):
                 """)
                 
                 if has_next:
-                    # Construct next URL manually based on current to be robust
+                    # Construct next URL manually 
                     curr_url = response.url
                     next_url = None
                     if "index.html" in curr_url and "index_" not in curr_url:
@@ -142,26 +130,6 @@ class MohrssSpider(scrapy.Spider):
 
         finally:
             await page.close()
-
-    def should_stop_crawl(self, item):
-        if not self.cutoff_date:
-            return False
-            
-        date_str = item.get("publish_date")
-        if not date_str:
-            return False
-            
-        try:
-            date_str = date_str.strip()
-            date_str = re.sub(r'[\[\]\(\)\s]', '', date_str)
-            item_date = datetime.strptime(date_str, "%Y-%m-%d")
-            
-            if item_date < self.cutoff_date:
-                return True
-        except ValueError:
-            pass
-            
-        return False
 
     async def errback(self, failure):
         self.logger.error(f"请求失败: {failure}")
