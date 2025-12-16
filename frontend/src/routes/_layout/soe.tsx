@@ -9,6 +9,7 @@ import { DataTable } from "@/components/Common/DataTable"
 import { getColumns } from "@/components/Soe/columns"
 import { getRegulatoryUnitColumns } from "@/components/Soe/regulatoryUnitColumns"
 import { EnterpriseDialog } from "@/components/Soe/EnterpriseDialog"
+import { ComboboxMultiSelect } from "@/components/Common/ComboboxMultiSelect"
 import { RegulatoryUnitDialog } from "@/components/Soe/RegulatoryUnitDialog"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -52,7 +53,7 @@ function SoePage() {
                         国央企扫盲
                     </h1>
                     <p className="text-muted-foreground">
-                        介绍中国境内的国央企及其监管单位，提供官网直达
+                        介绍中国境内的国央企及其监管单位，提供官网直达，AI锐评解析企业。
                     </p>
                 </div>
             </div>
@@ -78,6 +79,7 @@ function EnterprisesTab() {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [editingEnterprise, setEditingEnterprise] = useState<SoeEnterprisePublic | undefined>()
     const [deleteEnterprise, setDeleteEnterprise] = useState<SoeEnterprisePublic | undefined>()
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
     const queryClient = useQueryClient()
     const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -86,6 +88,12 @@ function EnterprisesTab() {
     const { data: regulatoryUnits } = useQuery({
         queryKey: ["regulatory-units"],
         queryFn: () => SoeService.readRegulatoryUnits({ limit: 1000 }),
+    })
+
+    // Query for categories
+    const { data: categories = [] } = useQuery({
+        queryKey: ["enterprise-categories"],
+        queryFn: () => SoeService.getEnterpriseCategories(),
     })
 
     const onEdit = (ent: SoeEnterprisePublic) => {
@@ -141,6 +149,14 @@ function EnterprisesTab() {
                             ))}
                         </SelectContent>
                     </Select>
+                    <ComboboxMultiSelect
+                        options={categories.map(c => ({ label: c, value: c }))}
+                        selected={selectedCategories}
+                        onChange={setSelectedCategories}
+                        placeholder="筛选行业分类"
+                        searchPlaceholder="搜索行业..."
+                        className="w-[200px]"
+                    />
                 </div>
                 <Button onClick={() => {
                     setEditingEnterprise(undefined)
@@ -182,6 +198,7 @@ function EnterprisesTab() {
             <Suspense fallback={<div>Loading...</div>}>
                 <EnterprisesTable
                     filterUnitId={selectedUnit === "all" ? undefined : selectedUnit}
+                    selectedCategories={selectedCategories}
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />
@@ -218,18 +235,22 @@ function EnterprisesTab() {
 
 function EnterprisesTable({
     filterUnitId,
+    selectedCategories,
     onEdit,
     onDelete
 }: {
     filterUnitId?: string,
+    selectedCategories?: string[],
     onEdit: (ent: SoeEnterprisePublic) => void
     onDelete: (ent: SoeEnterprisePublic) => void
 }) {
+    // Fetch enterprises
     const { data: enterprises } = useSuspenseQuery({
-        queryKey: ["enterprises", filterUnitId],
+        queryKey: ["enterprises", filterUnitId, selectedCategories],
         queryFn: () => SoeService.readEnterprises({
             limit: 1000,
-            regulatoryUnitId: filterUnitId || undefined
+            regulatoryUnitId: filterUnitId || undefined,
+            category: selectedCategories && selectedCategories.length > 0 ? selectedCategories.join(',') : undefined
         }),
     })
 

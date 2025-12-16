@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, SoeReadRegulatoryUnitsData, SoeReadRegulatoryUnitsResponse, SoeCreateRegulatoryUnitData, SoeCreateRegulatoryUnitResponse, SoeReadRegulatoryUnitData, SoeReadRegulatoryUnitResponse, SoeUpdateRegulatoryUnitData, SoeUpdateRegulatoryUnitResponse, SoeDeleteRegulatoryUnitData, SoeDeleteRegulatoryUnitResponse, SoeReadEnterprisesData, SoeReadEnterprisesResponse, SoeCreateEnterpriseData, SoeCreateEnterpriseResponse, SoeReadEnterpriseData, SoeReadEnterpriseResponse, SoeUpdateEnterpriseData, SoeUpdateEnterpriseResponse, SoeDeleteEnterpriseData, SoeDeleteEnterpriseResponse, SoeImportSoeDataData, SoeImportSoeDataResponse, SoeGetSoeImportTemplateResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, SoeReadRegulatoryUnitsData, SoeReadRegulatoryUnitsResponse, SoeCreateRegulatoryUnitData, SoeCreateRegulatoryUnitResponse, SoeReadRegulatoryUnitData, SoeReadRegulatoryUnitResponse, SoeUpdateRegulatoryUnitData, SoeUpdateRegulatoryUnitResponse, SoeDeleteRegulatoryUnitData, SoeDeleteRegulatoryUnitResponse, SoeReadEnterprisesData, SoeReadEnterprisesResponse, SoeCreateEnterpriseData, SoeCreateEnterpriseResponse, SoeReadEnterpriseData, SoeReadEnterpriseResponse, SoeUpdateEnterpriseData, SoeUpdateEnterpriseResponse, SoeDeleteEnterpriseData, SoeDeleteEnterpriseResponse, SoeImportSoeDataData, SoeImportSoeDataResponse, SoeGetSoeImportTemplateResponse, SoeGetEnterpriseCategoriesResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class AnnouncementsService {
     /**
@@ -642,11 +642,12 @@ export class SoeService {
     
     /**
      * Read Enterprises
-     * Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id.
+     * Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id and category.
      * @param data The data for the request.
      * @param data.skip
      * @param data.limit
      * @param data.regulatoryUnitId
+     * @param data.category
      * @returns SoeEnterprisesPublic Successful Response
      * @throws ApiError
      */
@@ -657,7 +658,8 @@ export class SoeService {
             query: {
                 skip: data.skip,
                 limit: data.limit,
-                regulatory_unit_id: data.regulatoryUnitId
+                regulatory_unit_id: data.regulatoryUnitId,
+                category: data.category
             },
             errors: {
                 422: 'Validation Error'
@@ -782,6 +784,19 @@ export class SoeService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/soe/template'
+        });
+    }
+    
+    /**
+     * Get Enterprise Categories
+     * Get all unique enterprise categories.
+     * @returns string Successful Response
+     * @throws ApiError
+     */
+    public static getEnterpriseCategories(): CancelablePromise<SoeGetEnterpriseCategoriesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/soe/categories'
         });
     }
 }

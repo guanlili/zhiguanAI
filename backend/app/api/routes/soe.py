@@ -122,20 +122,26 @@ def read_enterprises(
     skip: int = 0,
     limit: int = 100,
     regulatory_unit_id: uuid.UUID | None = None,
+    category: str | None = None
 ) -> Any:
     """
-    Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id.
+    Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id and category.
     """
     # Use selectinload to eagerly load the regulatory_unit relationship to avoid N+1 queries
     query = select(SoeEnterprise).options(selectinload(SoeEnterprise.regulatory_unit))
     if regulatory_unit_id:
         query = query.where(SoeEnterprise.regulatory_unit_id == regulatory_unit_id)
     
+    if category:
+        # Support comma separated categories for multi-select
+        categories = category.split(',')
+        if len(categories) > 1:
+            query = query.where(SoeEnterprise.category.in_(categories))
+        else:
+            query = query.where(SoeEnterprise.category == category)
+    
     # Count query needs to match the filter
-    count_statement = select(func.count()).select_from(SoeEnterprise)
-    if regulatory_unit_id:
-        count_statement = count_statement.where(SoeEnterprise.regulatory_unit_id == regulatory_unit_id)
-
+    count_statement = select(func.count()).select_from(query.subquery())
     count = session.exec(count_statement).one()
     
     statement = (
@@ -356,3 +362,14 @@ def get_soe_import_template() -> Any:
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": "attachment; filename=soe_import_template.xlsx"}
     )
+
+
+@router.get("/categories", response_model=list[str])
+def get_enterprise_categories(session: SessionDep) -> Any:
+    """
+    Get all unique enterprise categories.
+    """
+    statement = select(SoeEnterprise.category).distinct().where(SoeEnterprise.category != None)
+    categories = session.exec(statement).all()
+    # Filter out empty strings if any and sort
+    return sorted([c for c in categories if c])

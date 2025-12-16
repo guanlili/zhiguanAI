@@ -582,6 +582,7 @@ export type SoeDeleteRegulatoryUnitData = {
 export type SoeDeleteRegulatoryUnitResponse = (Message);
 
 export type SoeReadEnterprisesData = {
+    category?: (string | null);
     limit?: number;
     regulatoryUnitId?: (string | null);
     skip?: number;
@@ -621,6 +622,8 @@ export type SoeImportSoeDataData = {
 export type SoeImportSoeDataResponse = (Message);
 
 export type SoeGetSoeImportTemplateResponse = (unknown);
+
+export type SoeGetEnterpriseCategoriesResponse = (Array<(string)>);
 
 export type UsersReadUsersData = {
     limit?: number;
