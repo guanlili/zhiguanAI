@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.routes import items, job_applications, login, private, users, utils, announcements, scheduler, soe
+from app.api.routes import items, job_applications, login, private, users, utils, announcements, scheduler, soe, resumes
 from app.core.config import settings
 
 api_router = APIRouter()
@@ -12,6 +12,7 @@ api_router.include_router(job_applications.router)
 api_router.include_router(announcements.router)
 api_router.include_router(scheduler.router)
 api_router.include_router(soe.router)
+api_router.include_router(resumes.router, prefix="/resumes", tags=["resumes"])
 
 
 if settings.ENVIRONMENT == "local":

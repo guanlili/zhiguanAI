@@ -93,6 +93,9 @@ class Settings(BaseSettings):
     EMAIL_TEST_USER: EmailStr = "test@example.com"
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
+    
+    DEEPSEEK_API_KEY: str | None = None
+    DEEPSEEK_BASE_URL: str | None = "https://api.deepseek.com"
 
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         if value == "changethis":

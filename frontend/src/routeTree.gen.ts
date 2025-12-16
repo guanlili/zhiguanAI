@@ -21,6 +21,9 @@ import { Route as LayoutJobApplicationsRouteImport } from './routes/_layout/job-
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutAnnouncementsRouteImport } from './routes/_layout/announcements'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
+import { Route as LayoutResumesRouteRouteImport } from './routes/_layout/resumes/route'
+import { Route as LayoutResumesIndexRouteImport } from './routes/_layout/resumes/index'
+import { Route as LayoutResumesResumeIdRouteImport } from './routes/_layout/resumes/$resumeId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -81,12 +84,28 @@ const LayoutAdminRoute = LayoutAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutResumesRouteRoute = LayoutResumesRouteRouteImport.update({
+  id: '/resumes',
+  path: '/resumes',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutResumesIndexRoute = LayoutResumesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutResumesRouteRoute,
+} as any)
+const LayoutResumesResumeIdRoute = LayoutResumesResumeIdRouteImport.update({
+  id: '/$resumeId',
+  path: '/$resumeId',
+  getParentRoute: () => LayoutResumesRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/resumes': typeof LayoutResumesRouteRouteWithChildren
   '/admin': typeof LayoutAdminRoute
   '/announcements': typeof LayoutAnnouncementsRoute
   '/items': typeof LayoutItemsRoute
@@ -94,6 +113,8 @@ export interface FileRoutesByFullPath {
   '/settings': typeof LayoutSettingsRoute
   '/soe': typeof LayoutSoeRoute
   '/': typeof LayoutIndexRoute
+  '/resumes/$resumeId': typeof LayoutResumesResumeIdRoute
+  '/resumes/': typeof LayoutResumesIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -107,6 +128,8 @@ export interface FileRoutesByTo {
   '/settings': typeof LayoutSettingsRoute
   '/soe': typeof LayoutSoeRoute
   '/': typeof LayoutIndexRoute
+  '/resumes/$resumeId': typeof LayoutResumesResumeIdRoute
+  '/resumes': typeof LayoutResumesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -115,6 +138,7 @@ export interface FileRoutesById {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/_layout/resumes': typeof LayoutResumesRouteRouteWithChildren
   '/_layout/admin': typeof LayoutAdminRoute
   '/_layout/announcements': typeof LayoutAnnouncementsRoute
   '/_layout/items': typeof LayoutItemsRoute
@@ -122,6 +146,8 @@ export interface FileRoutesById {
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/soe': typeof LayoutSoeRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/resumes/$resumeId': typeof LayoutResumesResumeIdRoute
+  '/_layout/resumes/': typeof LayoutResumesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -130,6 +156,7 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
+    | '/resumes'
     | '/admin'
     | '/announcements'
     | '/items'
@@ -137,6 +164,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/soe'
     | '/'
+    | '/resumes/$resumeId'
+    | '/resumes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -150,6 +179,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/soe'
     | '/'
+    | '/resumes/$resumeId'
+    | '/resumes'
   id:
     | '__root__'
     | '/_layout'
@@ -157,6 +188,7 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
+    | '/_layout/resumes'
     | '/_layout/admin'
     | '/_layout/announcements'
     | '/_layout/items'
@@ -164,6 +196,8 @@ export interface FileRouteTypes {
     | '/_layout/settings'
     | '/_layout/soe'
     | '/_layout/'
+    | '/_layout/resumes/$resumeId'
+    | '/_layout/resumes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -260,10 +294,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAdminRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/resumes': {
+      id: '/_layout/resumes'
+      path: '/resumes'
+      fullPath: '/resumes'
+      preLoaderRoute: typeof LayoutResumesRouteRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/resumes/': {
+      id: '/_layout/resumes/'
+      path: '/'
+      fullPath: '/resumes/'
+      preLoaderRoute: typeof LayoutResumesIndexRouteImport
+      parentRoute: typeof LayoutResumesRouteRoute
+    }
+    '/_layout/resumes/$resumeId': {
+      id: '/_layout/resumes/$resumeId'
+      path: '/$resumeId'
+      fullPath: '/resumes/$resumeId'
+      preLoaderRoute: typeof LayoutResumesResumeIdRouteImport
+      parentRoute: typeof LayoutResumesRouteRoute
+    }
   }
 }
 
+interface LayoutResumesRouteRouteChildren {
+  LayoutResumesResumeIdRoute: typeof LayoutResumesResumeIdRoute
+  LayoutResumesIndexRoute: typeof LayoutResumesIndexRoute
+}
+
+const LayoutResumesRouteRouteChildren: LayoutResumesRouteRouteChildren = {
+  LayoutResumesResumeIdRoute: LayoutResumesResumeIdRoute,
+  LayoutResumesIndexRoute: LayoutResumesIndexRoute,
+}
+
+const LayoutResumesRouteRouteWithChildren =
+  LayoutResumesRouteRoute._addFileChildren(LayoutResumesRouteRouteChildren)
+
 interface LayoutRouteChildren {
+  LayoutResumesRouteRoute: typeof LayoutResumesRouteRouteWithChildren
   LayoutAdminRoute: typeof LayoutAdminRoute
   LayoutAnnouncementsRoute: typeof LayoutAnnouncementsRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
@@ -274,6 +343,7 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutResumesRouteRoute: LayoutResumesRouteRouteWithChildren,
   LayoutAdminRoute: LayoutAdminRoute,
   LayoutAnnouncementsRoute: LayoutAnnouncementsRoute,
   LayoutItemsRoute: LayoutItemsRoute,

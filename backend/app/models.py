@@ -45,6 +45,7 @@ class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    resumes: list["Resume"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -299,4 +300,52 @@ class SoeEnterprisePublic(SoeEnterpriseBase):
 
 class SoeEnterprisesPublic(SQLModel):
     data: list[SoeEnterprisePublic]
+    count: int
+
+
+# =============== AI Resume Models ===============
+
+
+# Shared properties
+class ResumeBase(SQLModel):
+    title: str = Field(min_length=1, max_length=255)
+    content: str | None = Field(default=None, description="Markdown content")
+    original_content: str | None = Field(default=None, description="Original resume content")
+    optimized_content: str | None = Field(default=None, description="Optimized resume content")
+
+
+# Properties to receive on creation
+class ResumeCreate(ResumeBase):
+    pass
+
+
+# Properties to receive on update
+class ResumeUpdate(SQLModel):
+    title: str | None = Field(default=None, min_length=1, max_length=255)
+    content: str | None = Field(default=None)
+    original_content: str | None = Field(default=None)
+    optimized_content: str | None = Field(default=None)
+
+
+# Database model
+class Resume(ResumeBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    owner_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User | None = Relationship(back_populates="resumes")
+
+
+# Properties to return via API
+class ResumePublic(ResumeBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+
+
+class ResumesPublic(SQLModel):
+    data: list[ResumePublic]
     count: int

@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, SoeReadRegulatoryUnitsData, SoeReadRegulatoryUnitsResponse, SoeCreateRegulatoryUnitData, SoeCreateRegulatoryUnitResponse, SoeReadRegulatoryUnitData, SoeReadRegulatoryUnitResponse, SoeUpdateRegulatoryUnitData, SoeUpdateRegulatoryUnitResponse, SoeDeleteRegulatoryUnitData, SoeDeleteRegulatoryUnitResponse, SoeReadEnterprisesData, SoeReadEnterprisesResponse, SoeCreateEnterpriseData, SoeCreateEnterpriseResponse, SoeReadEnterpriseData, SoeReadEnterpriseResponse, SoeUpdateEnterpriseData, SoeUpdateEnterpriseResponse, SoeDeleteEnterpriseData, SoeDeleteEnterpriseResponse, SoeImportSoeDataData, SoeImportSoeDataResponse, SoeGetSoeImportTemplateResponse, SoeGetEnterpriseCategoriesResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, ResumesReadResumesData, ResumesReadResumesResponse, ResumesCreateResumeData, ResumesCreateResumeResponse, ResumesReadResumeData, ResumesReadResumeResponse, ResumesUpdateResumeData, ResumesUpdateResumeResponse, ResumesDeleteResumeData, ResumesDeleteResumeResponse, ResumesParseResumeFileData, ResumesParseResumeFileResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, SoeReadRegulatoryUnitsData, SoeReadRegulatoryUnitsResponse, SoeCreateRegulatoryUnitData, SoeCreateRegulatoryUnitResponse, SoeReadRegulatoryUnitData, SoeReadRegulatoryUnitResponse, SoeUpdateRegulatoryUnitData, SoeUpdateRegulatoryUnitResponse, SoeDeleteRegulatoryUnitData, SoeDeleteRegulatoryUnitResponse, SoeReadEnterprisesData, SoeReadEnterprisesResponse, SoeCreateEnterpriseData, SoeCreateEnterpriseResponse, SoeReadEnterpriseData, SoeReadEnterpriseResponse, SoeUpdateEnterpriseData, SoeUpdateEnterpriseResponse, SoeDeleteEnterpriseData, SoeDeleteEnterpriseResponse, SoeImportSoeDataData, SoeImportSoeDataResponse, SoeGetSoeImportTemplateResponse, SoeGetEnterpriseCategoriesResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class AnnouncementsService {
     /**
@@ -467,6 +467,138 @@ export class PrivateService {
             url: '/api/v1/private/users/',
             body: data.requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class ResumesService {
+    /**
+     * Read Resumes
+     * Retrieve resumes.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns ResumesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readResumes(data: ResumesReadResumesData = {}): CancelablePromise<ResumesReadResumesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/resumes/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Resume
+     * Create new resume.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns ResumePublic Successful Response
+     * @throws ApiError
+     */
+    public static createResume(data: ResumesCreateResumeData): CancelablePromise<ResumesCreateResumeResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/resumes/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Resume
+     * Get resume by ID.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns ResumePublic Successful Response
+     * @throws ApiError
+     */
+    public static readResume(data: ResumesReadResumeData): CancelablePromise<ResumesReadResumeResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/resumes/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Resume
+     * Update a resume.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns ResumePublic Successful Response
+     * @throws ApiError
+     */
+    public static updateResume(data: ResumesUpdateResumeData): CancelablePromise<ResumesUpdateResumeResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/resumes/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Resume
+     * Delete a resume.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteResume(data: ResumesDeleteResumeData): CancelablePromise<ResumesDeleteResumeResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/resumes/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Parse Resume File
+     * Parse a resume file (PDF, DOCX, MD) to Markdown.
+     * Returns the parsed markdown in 'message' field.
+     * @param data The data for the request.
+     * @param data.formData
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static parseResumeFile(data: ResumesParseResumeFileData): CancelablePromise<ResumesParseResumeFileResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/resumes/parse',
+            formData: data.formData,
+            mediaType: 'multipart/form-data',
             errors: {
                 422: 'Validation Error'
             }

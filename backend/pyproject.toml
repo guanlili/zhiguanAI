@@ -24,6 +24,9 @@ dependencies = [
     "apscheduler>=3.11.1",
     "pandas>=2.3.3",
     "openpyxl>=3.1.5",
+    "python-docx>=1.2.0",
+    "pymupdf>=1.26.7",
+    "openai>=1.0.0",
 ]
 
 [tool.uv]

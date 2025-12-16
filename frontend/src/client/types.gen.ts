@@ -9,6 +9,10 @@ export type Body_login_login_access_token = {
     client_secret?: (string | null);
 };
 
+export type Body_resumes_parse_resume_file = {
+    file: (Blob | File);
+};
+
 export type Body_soe_import_soe_data = {
     file: (Blob | File);
 };
@@ -275,6 +279,36 @@ export type RegulatoryUnitUpdate = {
     level?: (string | null);
 };
 
+export type ResumeCreate = {
+    title: string;
+    /**
+     * Markdown content
+     */
+    content?: (string | null);
+};
+
+export type ResumePublic = {
+    title: string;
+    /**
+     * Markdown content
+     */
+    content?: (string | null);
+    id: string;
+    owner_id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type ResumesPublic = {
+    data: Array<ResumePublic>;
+    count: number;
+};
+
+export type ResumeUpdate = {
+    title?: (string | null);
+    content?: (string | null);
+};
+
 export type SoeEnterpriseCreate = {
     /**
      * 企业名称
@@ -534,6 +568,44 @@ export type PrivateCreateUserData = {
 };
 
 export type PrivateCreateUserResponse = (UserPublic);
+
+export type ResumesReadResumesData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type ResumesReadResumesResponse = (ResumesPublic);
+
+export type ResumesCreateResumeData = {
+    requestBody: ResumeCreate;
+};
+
+export type ResumesCreateResumeResponse = (ResumePublic);
+
+export type ResumesReadResumeData = {
+    id: string;
+};
+
+export type ResumesReadResumeResponse = (ResumePublic);
+
+export type ResumesUpdateResumeData = {
+    id: string;
+    requestBody: ResumeUpdate;
+};
+
+export type ResumesUpdateResumeResponse = (ResumePublic);
+
+export type ResumesDeleteResumeData = {
+    id: string;
+};
+
+export type ResumesDeleteResumeResponse = (Message);
+
+export type ResumesParseResumeFileData = {
+    formData: Body_resumes_parse_resume_file;
+};
+
+export type ResumesParseResumeFileResponse = (Message);
 
 export type SchedulerRunNowData = {
     days?: number;
