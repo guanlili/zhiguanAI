@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useNavigate, useLocation } from "@tansta
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { ResumesService } from "@/client"
 import { Button } from "@/components/ui/button"
-import { Plus, Loader2, FileText, Clock } from "lucide-react"
+import { Plus, Loader2, FileText } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { formatDistanceToNow } from "date-fns"
@@ -34,7 +34,7 @@ function ResumesLayout() {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["resumes"] })
             toast.success("Resume created")
-            navigate({ to: `/resumes/${data.id}` })
+            navigate({ to: "/resumes/$resumeId", params: { resumeId: data.id } })
         },
         onError: () => {
             toast.error("Failed to create resume")
@@ -71,7 +71,8 @@ function ResumesLayout() {
                                 return (
                                     <Link
                                         key={resume.id}
-                                        to={`/resumes/${resume.id}`}
+                                        to="/resumes/$resumeId"
+                                        params={{ resumeId: resume.id }}
                                         className={cn(
                                             "block px-3 py-2.5 rounded-md text-sm transition-colors relative group",
                                             isActive

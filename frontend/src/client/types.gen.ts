@@ -285,6 +285,19 @@ export type ResumeCreate = {
      * Markdown content
      */
     content?: (string | null);
+    /**
+     * Original resume content
+     */
+    original_content?: (string | null);
+    /**
+     * Optimized resume content
+     */
+    optimized_content?: (string | null);
+};
+
+export type ResumeOptimizeRequest = {
+    content: string;
+    jd: string;
 };
 
 export type ResumePublic = {
@@ -293,6 +306,14 @@ export type ResumePublic = {
      * Markdown content
      */
     content?: (string | null);
+    /**
+     * Original resume content
+     */
+    original_content?: (string | null);
+    /**
+     * Optimized resume content
+     */
+    optimized_content?: (string | null);
     id: string;
     owner_id: string;
     created_at: string;
@@ -307,6 +328,8 @@ export type ResumesPublic = {
 export type ResumeUpdate = {
     title?: (string | null);
     content?: (string | null);
+    original_content?: (string | null);
+    optimized_content?: (string | null);
 };
 
 export type SoeEnterpriseCreate = {
@@ -606,6 +629,12 @@ export type ResumesParseResumeFileData = {
 };
 
 export type ResumesParseResumeFileResponse = (Message);
+
+export type ResumesOptimizeResumeData = {
+    requestBody: ResumeOptimizeRequest;
+};
+
+export type ResumesOptimizeResumeResponse = (unknown);
 
 export type SchedulerRunNowData = {
     days?: number;

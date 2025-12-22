@@ -1108,11 +1108,51 @@ export const ResumeCreateSchema = {
             ],
             title: 'Content',
             description: 'Markdown content'
+        },
+        original_content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Original Content',
+            description: 'Original resume content'
+        },
+        optimized_content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Optimized Content',
+            description: 'Optimized resume content'
         }
     },
     type: 'object',
     required: ['title'],
     title: 'ResumeCreate'
+} as const;
+
+export const ResumeOptimizeRequestSchema = {
+    properties: {
+        content: {
+            type: 'string',
+            title: 'Content'
+        },
+        jd: {
+            type: 'string',
+            title: 'Jd'
+        }
+    },
+    type: 'object',
+    required: ['content', 'jd'],
+    title: 'ResumeOptimizeRequest'
 } as const;
 
 export const ResumePublicSchema = {
@@ -1134,6 +1174,30 @@ export const ResumePublicSchema = {
             ],
             title: 'Content',
             description: 'Markdown content'
+        },
+        original_content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Original Content',
+            description: 'Original resume content'
+        },
+        optimized_content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Optimized Content',
+            description: 'Optimized resume content'
         },
         id: {
             type: 'string',
@@ -1186,6 +1250,28 @@ export const ResumeUpdateSchema = {
                 }
             ],
             title: 'Content'
+        },
+        original_content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Original Content'
+        },
+        optimized_content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Optimized Content'
         }
     },
     type: 'object',
