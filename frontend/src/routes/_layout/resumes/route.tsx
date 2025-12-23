@@ -2,10 +2,9 @@ import { createFileRoute, Link, Outlet, useNavigate, useLocation } from "@tansta
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { ResumesService } from "@/client"
 import { Button } from "@/components/ui/button"
-import { Plus, Loader2, FileText } from "lucide-react"
+import { Plus, Loader2, FileText, Briefcase } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
-import { formatDistanceToNow } from "date-fns"
 
 export const Route = createFileRoute("/_layout/resumes")({
     component: ResumesLayout,
@@ -82,10 +81,26 @@ function ResumesLayout() {
                                     >
                                         <div className="flex items-center gap-2">
                                             <FileText className={cn("h-4 w-4 shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
-                                            <span className="truncate flex-1">{resume.title || "Untitled"}</span>
+                                            <span className="truncate flex-1 font-medium">{resume.title || "Untitled"}</span>
                                         </div>
-                                        <div className="text-[10px] text-muted-foreground/60 pl-6 mt-0.5 truncate">
-                                            {formatDistanceToNow(new Date(resume.updated_at), { addSuffix: true })}
+
+                                        {resume.target_role && (
+                                            <div className="flex items-center gap-1.5 pl-6 mt-1 text-[11px] text-primary/80 font-medium">
+                                                <Briefcase className="h-3 w-3" />
+                                                <span className="truncate">{resume.target_role}</span>
+                                            </div>
+                                        )}
+
+                                        <div className="text-[10px] text-muted-foreground/60 pl-6 mt-1 truncate">
+                                            {new Intl.DateTimeFormat("zh-CN", {
+                                                timeZone: "Asia/Shanghai",
+                                                year: "numeric",
+                                                month: "2-digit",
+                                                day: "2-digit",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                hour12: false
+                                            }).format(new Date(resume.updated_at.endsWith("Z") ? resume.updated_at : `${resume.updated_at}Z`)).replace(/\//g, "-")}
                                         </div>
                                     </Link>
                                 )
@@ -94,6 +109,7 @@ function ResumesLayout() {
                     )}
                 </div>
             </div>
+
 
             {/* Main Content Area */}
             <div className="flex-1 min-w-0 bg-background flex flex-col">

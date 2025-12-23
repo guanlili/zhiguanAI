@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from typing import Any, AsyncGenerator
 
 from fastapi import APIRouter, HTTPException, UploadFile, File
@@ -83,6 +84,7 @@ def update_resume(
     
     update_data = resume_in.model_dump(exclude_unset=True)
     resume.sqlmodel_update(update_data)
+    resume.updated_at = datetime.utcnow()
     session.add(resume)
     session.commit()
     session.refresh(resume)

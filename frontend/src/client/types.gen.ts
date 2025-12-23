@@ -293,6 +293,10 @@ export type ResumeCreate = {
      * Optimized resume content
      */
     optimized_content?: (string | null);
+    /**
+     * Target job position
+     */
+    target_role?: (string | null);
 };
 
 export type ResumeOptimizeRequest = {
@@ -314,6 +318,10 @@ export type ResumePublic = {
      * Optimized resume content
      */
     optimized_content?: (string | null);
+    /**
+     * Target job position
+     */
+    target_role?: (string | null);
     id: string;
     owner_id: string;
     created_at: string;
@@ -330,6 +338,7 @@ export type ResumeUpdate = {
     content?: (string | null);
     original_content?: (string | null);
     optimized_content?: (string | null);
+    target_role?: (string | null);
 };
 
 export type SoeEnterpriseCreate = {

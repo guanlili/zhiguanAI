@@ -52,7 +52,8 @@ function ResumeEditPage() {
     const [activeTab, setActiveTab] = useState("original") // original, optimized
     const [isSplitView, setIsSplitView] = useState(false)
     const [isOptimizing, setIsOptimizing] = useState(false)
-    const [targetRole, setTargetRole] = useState("")
+    const [jd, setJd] = useState("") // Job Description
+    const [targetPosition, setTargetPosition] = useState("") // Target Role Name
     const [originalViewMode, setOriginalViewMode] = useState<"edit" | "preview">("edit"); // default edit (Code)
     const [optimizedViewMode, setOptimizedViewMode] = useState<"edit" | "preview">("preview"); // default preview (Eye)
 
@@ -67,6 +68,7 @@ function ResumeEditPage() {
             setTitle(resume.title);
             setContent(resume.content || "");
             setOptimizedContent(resume.optimized_content || "");
+            setTargetPosition(resume.target_role || "");
             // Do NOT force view mode here; keep current mode (edit/preview) after save
             setIsDirty(false);
         }
@@ -76,13 +78,14 @@ function ResumeEditPage() {
 
     // Mutations
     const updateMutation = useMutation({
-        mutationFn: async (data: { title?: string, content?: string, optimized_content?: string }) => {
+        mutationFn: async (data: { title?: string, content?: string, optimized_content?: string, target_role?: string }) => {
             return ResumesService.updateResume({
                 id: resumeId,
                 requestBody: {
                     title: data.title ?? title,
                     content: data.content ?? content,
-                    optimized_content: data.optimized_content ?? optimizedContent
+                    optimized_content: data.optimized_content ?? optimizedContent,
+                    target_role: data.target_role ?? targetPosition
                 }
             })
         },
@@ -159,7 +162,7 @@ function ResumeEditPage() {
         if (file) parseMutation.mutate(file)
     }
 
-    const handleSave = () => updateMutation.mutate({ title, content, optimized_content: optimizedContent })
+    const handleSave = () => updateMutation.mutate({ title, content, optimized_content: optimizedContent, target_role: targetPosition })
 
     const handleTitleBlur = () => {
         if (title !== resume?.title) {
@@ -187,7 +190,7 @@ function ResumeEditPage() {
                 },
                 body: JSON.stringify({
                     content: content, // Input is always "Original" content
-                    jd: targetRole
+                    jd: jd
                 })
             })
 
@@ -245,20 +248,29 @@ function ResumeEditPage() {
                     {/* Tabs */}
                     <div className="flex items-center bg-muted/50 p-1 rounded-lg">
                         {[
-                            { id: "original", label: "原始简历" },
-                            { id: "optimized", label: "优化后的简历" }
+                            { id: "original", label: "原始简历", hasContent: !!content.trim() },
+                            { id: "optimized", label: "优化后的简历", hasContent: !!optimizedContent.trim() }
                         ].map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={cn(
-                                    "px-4 py-1.5 text-sm font-medium rounded-md transition-all",
+                                    "px-4 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 relative",
                                     activeTab === tab.id
                                         ? "bg-primary text-primary-foreground shadow-sm"
                                         : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                 )}
                             >
                                 {tab.label}
+                                <div
+                                    className={cn(
+                                        "h-1.5 w-1.5 rounded-full transition-all shrink-0",
+                                        tab.hasContent
+                                            ? (activeTab === tab.id ? "bg-primary-foreground ring-2 ring-primary-foreground/20" : "bg-green-500 shadow-[0_0_4px_rgba(34,197,94,0.5)]")
+                                            : "bg-muted-foreground/30"
+                                    )}
+                                    title={tab.hasContent ? "已填充内容" : "内容为空"}
+                                />
                             </button>
                         ))}
                     </div>
@@ -315,20 +327,35 @@ function ResumeEditPage() {
                             />
                         </div>
 
+                        {/* Target Position Input */}
+                        <div className="mb-4 shrink-0">
+                            <label className="text-sm font-medium flex items-center gap-2 mb-2">
+                                <FileText className="h-4 w-4 text-primary" />
+                                目标岗位名称
+                            </label>
+                            <Input
+                                placeholder="例如：前端开发工程师"
+                                value={targetPosition}
+                                onChange={(e) => { setTargetPosition(e.target.value); setIsDirty(true) }}
+                                onBlur={() => { if (targetPosition !== resume?.target_role) updateMutation.mutate({ target_role: targetPosition }) }}
+                                className="bg-background/50 focus:bg-background transition-colors"
+                            />
+                        </div>
+
                         {/* Divider */}
                         <div className="relative mb-6 shrink-0">
                             <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-                            <div className="relative flex justify-center text-xs uppercase"><span className="bg-muted/10 px-2 text-muted-foreground">或者直接输入</span></div>
+                            <div className="relative flex justify-center text-xs uppercase"><span className="bg-muted/10 px-2 text-muted-foreground">JD 内容</span></div>
                         </div>
 
                         {/* Target JD Input */}
                         <div className="flex-1 flex flex-col min-h-0 gap-2">
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-medium flex items-center gap-2">
-                                    <FileText className="h-4 w-4 text-primary" />
-                                    目标岗位 JD
+                                    <Wand2 className="h-4 w-4 text-primary" />
+                                    JD 详细描述
                                 </label>
-                                <Button size="sm" variant="ghost" className="h-6 text-xs" onClick={() => setTargetRole("")}>
+                                <Button size="sm" variant="ghost" className="h-6 text-xs" onClick={() => setJd("")}>
                                     清空
                                 </Button>
                             </div>
@@ -337,14 +364,14 @@ function ResumeEditPage() {
                                 <Textarea
                                     placeholder="请粘贴目标岗位的职位描述 (JD)，职观AI将根据JD为您优化简历..."
                                     className="absolute inset-0 w-full h-full resize-none p-4 shadow-sm bg-background/50 focus:bg-background transition-colors text-sm leading-relaxed"
-                                    value={targetRole}
-                                    onChange={(e) => setTargetRole(e.target.value)}
+                                    value={jd}
+                                    onChange={(e) => setJd(e.target.value)}
                                 />
                                 <Button
                                     className="absolute bottom-4 right-4 shadow-lg"
                                     size="sm"
                                     onClick={handleOptimize}
-                                    disabled={!targetRole.trim() || isOptimizing}
+                                    disabled={!jd.trim() || isOptimizing}
                                 >
                                     {isOptimizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
                                     AI 针对性优化
@@ -361,7 +388,11 @@ function ResumeEditPage() {
                                         key={role}
                                         variant="outline"
                                         className="cursor-pointer hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-colors py-1 px-2.5 font-normal text-xs bg-background/50"
-                                        onClick={() => setTargetRole(prev => (prev ? prev + "\n" + role : role))}
+                                        onClick={() => {
+                                            setTargetPosition(role)
+                                            setIsDirty(true)
+                                            // Optional: update JD with some template if needed, but here we just set position
+                                        }}
                                     >
                                         {role}
                                     </Badge>

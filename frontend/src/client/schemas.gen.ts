@@ -1132,6 +1132,19 @@ export const ResumeCreateSchema = {
             ],
             title: 'Optimized Content',
             description: 'Optimized resume content'
+        },
+        target_role: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Role',
+            description: 'Target job position'
         }
     },
     type: 'object',
@@ -1198,6 +1211,19 @@ export const ResumePublicSchema = {
             ],
             title: 'Optimized Content',
             description: 'Optimized resume content'
+        },
+        target_role: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Role',
+            description: 'Target job position'
         },
         id: {
             type: 'string',
@@ -1272,6 +1298,18 @@ export const ResumeUpdateSchema = {
                 }
             ],
             title: 'Optimized Content'
+        },
+        target_role: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Role'
         }
     },
     type: 'object',
