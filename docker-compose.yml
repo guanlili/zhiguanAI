@@ -1,5 +1,4 @@
 services:
-
   db:
     image: postgres:17
     restart: always
@@ -32,7 +31,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      - traefik.constraint-label=traefik-public
+      # - traefik.constraint-label=traefik-public
       - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.rule=Host(`adminer.${DOMAIN?Variable not set}`)
       - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.entrypoints=http
       - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.middlewares=https-redirect
@@ -107,6 +106,10 @@ services:
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
+    # 👇👇👇 关键修改：把服务器上的正确配置加回来了 👇👇👇
+    volumes:
+      - ./crawler:/crawler
+    # 👆👆👆 关键修改结束 👆👆👆
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/"]
@@ -119,7 +122,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      - traefik.constraint-label=traefik-public
+      # - traefik.constraint-label=traefik-public
 
       - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=8000
 
@@ -148,7 +151,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      - traefik.constraint-label=traefik-public
+      # - traefik.constraint-label=traefik-public
 
       - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
 
