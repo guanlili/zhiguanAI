@@ -4,7 +4,7 @@ from typing import Any, AsyncGenerator
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from openai import OpenAI
+from openai import AsyncOpenAI
 from sqlmodel import func, select
 import fitz  # pymupdf
 import docx
@@ -155,7 +155,7 @@ async def optimize_resume(
     if not settings.DEEPSEEK_API_KEY:
         raise HTTPException(status_code=500, detail="DeepSeek API Key not configured")
 
-    client = OpenAI(
+    client = AsyncOpenAI(
         api_key=settings.DEEPSEEK_API_KEY,
         base_url=settings.DEEPSEEK_BASE_URL,
     )
@@ -182,7 +182,7 @@ async def optimize_resume(
 
     async def generate() -> AsyncGenerator[str, None]:
         try:
-            stream = client.chat.completions.create(
+            stream = await client.chat.completions.create(
                 model="deepseek-chat", # or "deepseek-coder" or generic "gpt-3.5-turbo" if mapping
                 messages=[
                     {"role": "system", "content": "You are a helpful expert resume improver."},
@@ -191,10 +191,19 @@ async def optimize_resume(
                 stream=True,
                 temperature=0.7,
             )
-            for chunk in stream:
+            async for chunk in stream:
                 if chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
         except Exception as e:
             yield f"\n\n[Error: {str(e)}]"
 
-    return StreamingResponse(generate(), media_type="text/event-stream")
+    return StreamingResponse(
+        generate(), 
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        }
+    )
+
