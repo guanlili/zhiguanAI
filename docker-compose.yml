@@ -31,7 +31,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      # - traefik.constraint-label=traefik-public
+      - traefik.constraint-label=traefik-public
       - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.rule=Host(`adminer.${DOMAIN?Variable not set}`)
       - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.entrypoints=http
       - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.middlewares=https-redirect
@@ -122,7 +122,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      # - traefik.constraint-label=traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.http.middlewares.gzip.compress=true
 
       - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=8000
 
@@ -135,7 +136,9 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.tls.certresolver=le
 
       # Enable redirection for HTTP and HTTPS
-      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.middlewares=https-redirect
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.middlewares=https-redirect,gzip
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.middlewares=gzip
+      
 
   frontend:
     image: '${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}'
@@ -151,7 +154,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      # - traefik.constraint-label=traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.http.middlewares.gzip.compress=true
 
       - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
 
@@ -164,7 +168,8 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-https.tls.certresolver=le
 
       # Enable redirection for HTTP and HTTPS
-      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect,gzip
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-https.middlewares=gzip
 volumes:
   app-db-data:
 
