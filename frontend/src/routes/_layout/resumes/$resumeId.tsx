@@ -25,6 +25,17 @@ import { useState, useEffect, useRef } from "react"
 import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export const Route = createFileRoute("/_layout/resumes/$resumeId")({
     component: ResumeEditPage,
@@ -238,14 +249,20 @@ function ResumeEditPage() {
             <div className="flex items-center justify-between px-6 py-3 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="flex items-center gap-6">
                     {/* Title Rename */}
-                    <div className="relative group">
-                        <Input
-                            value={title}
-                            onChange={(e) => { setTitle(e.target.value); setIsDirty(true) }}
-                            onBlur={handleTitleBlur}
-                            className="h-8 w-[200px] border-transparent bg-transparent hover:border-input focus:border-input focus:bg-background font-semibold text-lg px-2 -ml-2 truncate transition-all"
-                        />
-                        <Pencil className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 pointer-events-none" />
+                    <div className="relative group flex items-center gap-2">
+                        <div className="flex flex-col">
+                            <label className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold px-0.5">简历名称</label>
+                            <div className="flex items-center gap-2">
+                                <Input
+                                    value={title}
+                                    onChange={(e) => { setTitle(e.target.value); setIsDirty(true) }}
+                                    onBlur={handleTitleBlur}
+                                    className="h-9 w-[240px] border-muted/20 bg-muted/5 hover:border-primary/30 focus:border-primary/50 focus:bg-background font-bold text-lg px-2 -ml-1 truncate transition-all shadow-none"
+                                    placeholder="输入简历名称..."
+                                />
+                                <Pencil className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary transition-colors cursor-pointer" />
+                            </div>
+                        </div>
                     </div>
 
                     {/* Tabs */}
@@ -284,15 +301,35 @@ function ResumeEditPage() {
                         <Download className="mr-2 h-3.5 w-3.5" />
                         下载
                     </Button>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        onClick={() => deleteMutation.mutate()}
-                    >
-                        <Trash2 className="mr-2 h-3.5 w-3.5" />
-                        删除
-                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            >
+                                <Trash2 className="mr-2 h-3.5 w-3.5" />
+                                删除
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>确定要删除这份简历吗？</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    此操作无法撤销。该简历的所有原始内容和 AI 优化版本都将被永久删除。
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>取消</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={() => deleteMutation.mutate()}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                >
+                                    确定删除
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             </div>
 

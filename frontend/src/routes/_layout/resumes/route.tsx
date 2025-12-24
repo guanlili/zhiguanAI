@@ -22,10 +22,11 @@ function ResumesLayout() {
 
     const createMutation = useMutation({
         mutationFn: async () => {
-            // Create a default resume
+            const now = new Date()
+            const dateStr = `${now.getMonth() + 1}${now.getDate()}`
             return await ResumesService.createResume({
                 requestBody: {
-                    title: "New Resume",
+                    title: `新简历_${dateStr}`,
                     content: ""
                 }
             })
@@ -73,15 +74,17 @@ function ResumesLayout() {
                                         to="/resumes/$resumeId"
                                         params={{ resumeId: resume.id }}
                                         className={cn(
-                                            "block px-3 py-2.5 rounded-md text-sm transition-colors relative group",
+                                            "block px-3 py-3 rounded-lg text-sm transition-all relative group border mb-1",
                                             isActive
-                                                ? "bg-accent text-accent-foreground font-medium"
-                                                : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                                                ? "bg-primary/5 border-primary/20 text-foreground ring-1 ring-primary/10"
+                                                : "text-muted-foreground hover:bg-muted/40 hover:text-foreground border-transparent"
                                         )}
                                     >
                                         <div className="flex items-center gap-2">
-                                            <FileText className={cn("h-4 w-4 shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
-                                            <span className="truncate flex-1 font-medium">{resume.title || "Untitled"}</span>
+                                            <FileText className={cn("h-4 w-4 shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary transition-colors")} />
+                                            <span className={cn("truncate flex-1", isActive ? "font-bold text-foreground" : "font-medium")}>
+                                                {resume.title || "未命名简历"}
+                                            </span>
                                         </div>
 
                                         {resume.target_role && (
