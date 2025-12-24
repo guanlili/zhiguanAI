@@ -794,12 +794,13 @@ export class SoeService {
     
     /**
      * Read Enterprises
-     * Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id and category.
+     * Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id, category and search query.
      * @param data The data for the request.
      * @param data.skip
      * @param data.limit
      * @param data.regulatoryUnitId
      * @param data.category
+     * @param data.search
      * @returns SoeEnterprisesPublic Successful Response
      * @throws ApiError
      */
@@ -811,7 +812,8 @@ export class SoeService {
                 skip: data.skip,
                 limit: data.limit,
                 regulatory_unit_id: data.regulatoryUnitId,
-                category: data.category
+                category: data.category,
+                search: data.search
             },
             errors: {
                 422: 'Validation Error'

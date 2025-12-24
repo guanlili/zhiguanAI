@@ -122,16 +122,23 @@ def read_enterprises(
     skip: int = 0,
     limit: int = 100,
     regulatory_unit_id: uuid.UUID | None = None,
-    category: str | None = None
+    category: str | None = None,
+    search: str | None = None
 ) -> Any:
     """
-    Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id and category.
+    Retrieve all SOE enterprises. Optionally filter by regulatory_unit_id, category and search query.
     """
     # Use selectinload to eagerly load the regulatory_unit relationship to avoid N+1 queries
     query = select(SoeEnterprise).options(selectinload(SoeEnterprise.regulatory_unit))
     if regulatory_unit_id:
         query = query.where(SoeEnterprise.regulatory_unit_id == regulatory_unit_id)
     
+    if search:
+        query = query.where(
+            (SoeEnterprise.name.ilike(f"%{search}%")) |
+            (SoeEnterprise.description.ilike(f"%{search}%"))
+        )
+
     if category:
         # Support comma separated categories for multi-select
         categories = category.split(',')

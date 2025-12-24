@@ -1,8 +1,8 @@
 
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { Building2, Plus, Filter, Upload, Download } from "lucide-react"
-import { Suspense, useState } from "react"
+import { Building2, Plus, Filter, Upload, Download, Search } from "lucide-react"
+import { Suspense, useState, useEffect } from "react"
 
 import { SoeService, SoeEnterprisePublic, RegulatoryUnitPublic, ApiError } from "@/client"
 import { DataTable } from "@/components/Common/DataTable"
@@ -20,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -80,9 +81,19 @@ function EnterprisesTab() {
     const [editingEnterprise, setEditingEnterprise] = useState<SoeEnterprisePublic | undefined>()
     const [deleteEnterprise, setDeleteEnterprise] = useState<SoeEnterprisePublic | undefined>()
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+    const [searchTerm, setSearchTerm] = useState("")
+    const [debouncedSearch, setDebouncedSearch] = useState("")
 
     const queryClient = useQueryClient()
     const { showSuccessToast, showErrorToast } = useCustomToast()
+
+    // Debounce search term
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm)
+        }, 500)
+        return () => clearTimeout(timer)
+    }, [searchTerm])
 
     // Query for regulatory units for filter
     const { data: regulatoryUnits } = useQuery({
@@ -157,6 +168,16 @@ function EnterprisesTab() {
                         searchPlaceholder="搜索行业..."
                         className="w-[200px]"
                     />
+                    <div className="relative w-[300px]">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            type="search"
+                            placeholder="搜索企业名称或简介..."
+                            className="pl-9 bg-background"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                 </div>
                 <Button onClick={() => {
                     setEditingEnterprise(undefined)
@@ -199,6 +220,7 @@ function EnterprisesTab() {
                 <EnterprisesTable
                     filterUnitId={selectedUnit === "all" ? undefined : selectedUnit}
                     selectedCategories={selectedCategories}
+                    search={debouncedSearch}
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />
@@ -236,21 +258,24 @@ function EnterprisesTab() {
 function EnterprisesTable({
     filterUnitId,
     selectedCategories,
+    search,
     onEdit,
     onDelete
 }: {
     filterUnitId?: string,
     selectedCategories?: string[],
+    search?: string,
     onEdit: (ent: SoeEnterprisePublic) => void
     onDelete: (ent: SoeEnterprisePublic) => void
 }) {
     // Fetch enterprises
     const { data: enterprises } = useSuspenseQuery({
-        queryKey: ["enterprises", filterUnitId, selectedCategories],
+        queryKey: ["enterprises", filterUnitId, selectedCategories, search],
         queryFn: () => SoeService.readEnterprises({
             limit: 1000,
             regulatoryUnitId: filterUnitId || undefined,
-            category: selectedCategories && selectedCategories.length > 0 ? selectedCategories.join(',') : undefined
+            category: selectedCategories && selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
+            search: search || undefined
         }),
     })
 

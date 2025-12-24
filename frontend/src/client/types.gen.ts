@@ -704,6 +704,7 @@ export type SoeReadEnterprisesData = {
     category?: (string | null);
     limit?: number;
     regulatoryUnitId?: (string | null);
+    search?: (string | null);
     skip?: number;
 };
 
