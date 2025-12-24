@@ -313,6 +313,7 @@ class ResumeBase(SQLModel):
     original_content: str | None = Field(default=None, description="Original resume content")
     optimized_content: str | None = Field(default=None, description="Optimized resume content")
     target_role: str | None = Field(default=None, max_length=255, description="Target job position")
+    target_jd: str | None = Field(default=None, description="Target job description")
 
 
 # Properties to receive on creation
@@ -327,6 +328,7 @@ class ResumeUpdate(SQLModel):
     original_content: str | None = Field(default=None)
     optimized_content: str | None = Field(default=None)
     target_role: str | None = Field(default=None, max_length=255)
+    target_jd: str | None = Field(default=None)
 
 
 # Database model

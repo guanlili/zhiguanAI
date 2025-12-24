@@ -1145,6 +1145,18 @@ export const ResumeCreateSchema = {
             ],
             title: 'Target Role',
             description: 'Target job position'
+        },
+        target_jd: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Jd',
+            description: 'Target job description'
         }
     },
     type: 'object',
@@ -1224,6 +1236,18 @@ export const ResumePublicSchema = {
             ],
             title: 'Target Role',
             description: 'Target job position'
+        },
+        target_jd: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Jd',
+            description: 'Target job description'
         },
         id: {
             type: 'string',
@@ -1310,6 +1334,17 @@ export const ResumeUpdateSchema = {
                 }
             ],
             title: 'Target Role'
+        },
+        target_jd: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Jd'
         }
     },
     type: 'object',

@@ -69,6 +69,7 @@ function ResumeEditPage() {
             setContent(resume.content || "");
             setOptimizedContent(resume.optimized_content || "");
             setTargetPosition(resume.target_role || "");
+            setJd(resume.target_jd || "");
             // Do NOT force view mode here; keep current mode (edit/preview) after save
             setIsDirty(false);
         }
@@ -78,14 +79,15 @@ function ResumeEditPage() {
 
     // Mutations
     const updateMutation = useMutation({
-        mutationFn: async (data: { title?: string, content?: string, optimized_content?: string, target_role?: string }) => {
+        mutationFn: async (data: { title?: string, content?: string, optimized_content?: string, target_role?: string, target_jd?: string }) => {
             return ResumesService.updateResume({
                 id: resumeId,
                 requestBody: {
                     title: data.title ?? title,
                     content: data.content ?? content,
                     optimized_content: data.optimized_content ?? optimizedContent,
-                    target_role: data.target_role ?? targetPosition
+                    target_role: data.target_role ?? targetPosition,
+                    target_jd: data.target_jd ?? jd
                 }
             })
         },
@@ -162,7 +164,7 @@ function ResumeEditPage() {
         if (file) parseMutation.mutate(file)
     }
 
-    const handleSave = () => updateMutation.mutate({ title, content, optimized_content: optimizedContent, target_role: targetPosition })
+    const handleSave = () => updateMutation.mutate({ title, content, optimized_content: optimizedContent, target_role: targetPosition, target_jd: jd })
 
     const handleTitleBlur = () => {
         if (title !== resume?.title) {
@@ -213,7 +215,8 @@ function ResumeEditPage() {
             updateMutation.mutate({
                 title,
                 content,
-                optimized_content: accumulatedContent
+                optimized_content: accumulatedContent,
+                target_jd: jd
             })
             // After optimization, show preview mode
             setOptimizedViewMode("preview");
@@ -365,7 +368,8 @@ function ResumeEditPage() {
                                     placeholder="请粘贴目标岗位的职位描述 (JD)，职观AI将根据JD为您优化简历..."
                                     className="absolute inset-0 w-full h-full resize-none p-4 shadow-sm bg-background/50 focus:bg-background transition-colors text-sm leading-relaxed"
                                     value={jd}
-                                    onChange={(e) => setJd(e.target.value)}
+                                    onChange={(e) => { setJd(e.target.value); setIsDirty(true) }}
+                                    onBlur={() => { if (jd !== resume?.target_jd) updateMutation.mutate({ target_jd: jd }) }}
                                 />
                                 <Button
                                     className="absolute bottom-4 right-4 shadow-lg"
