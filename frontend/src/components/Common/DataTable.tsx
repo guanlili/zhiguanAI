@@ -10,9 +10,11 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  GripVertical
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
   Select,
   SelectContent,
@@ -29,21 +31,151 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core"
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onRowClick?: (row: TData) => void
+  onRowDoubleClick?: (row: TData) => void
+  onRowSelectionChange?: (rowSelection: any) => void
+  rowSelection?: any
+  getRowId?: (row: TData) => string
+  reorderable?: boolean
+  onReorder?: (data: TData[]) => void
+  updateData?: (rowIndex: number, columnId: string, value: any) => void
+}
+
+function DraggableTableRow<TData>({
+  row,
+  onRowClick,
+  onRowDoubleClick,
+  reorderable,
+}: {
+  row: any
+  onRowClick?: (row: TData) => void
+  onRowDoubleClick?: (row: TData) => void
+  reorderable?: boolean
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: row.id,
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 999 : "auto",
+    position: "relative" as const,
+  }
+
+  return (
+    <TableRow
+      ref={setNodeRef}
+      style={style}
+      onClick={() => onRowClick?.(row.original)}
+      onDoubleClick={() => onRowDoubleClick?.(row.original)}
+      className={cn(
+        (onRowClick || onRowDoubleClick) && "cursor-pointer select-none",
+        isDragging && "bg-muted shadow-lg"
+      )}
+    >
+      {row.getVisibleCells().map((cell: any) => (
+        <TableCell key={cell.id}>
+          <div className="flex items-center gap-2">
+            {reorderable && cell.column.id === "select" && (
+              <div
+                {...attributes}
+                {...listeners}
+                className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded"
+              >
+                <GripVertical className="size-4 text-muted-foreground" />
+              </div>
+            )}
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </div>
+        </TableCell>
+      ))}
+    </TableRow>
+  )
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onRowClick,
+  onRowDoubleClick,
+  onRowSelectionChange,
+  rowSelection = {},
+  getRowId,
+  reorderable,
+  onReorder,
+  updateData,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onRowSelectionChange,
+    getRowId,
+    state: {
+      rowSelection,
+    },
+    meta: {
+      updateData,
+    },
   })
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (active.id !== over?.id && data) {
+      const oldIndex = data.findIndex((item) => (getRowId?.(item) || (item as any).id) === active.id)
+      const newIndex = data.findIndex((item) => (getRowId?.(item) || (item as any).id) === over?.id)
+
+      if (oldIndex !== -1 && newIndex !== -1) {
+        onReorder?.(arrayMove(data, oldIndex, newIndex))
+      }
+    }
+  }
+
+  const tableRows = table.getRowModel().rows
 
   return (
     <div className="flex flex-col gap-4">
@@ -57,9 +189,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 )
               })}
@@ -67,16 +199,47 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+          {tableRows.length ? (
+            reorderable ? (
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                modifiers={[restrictToVerticalAxis]}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={tableRows.map((row) => row.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {tableRows.map((row) => (
+                    <DraggableTableRow
+                      key={row.id}
+                      row={row}
+                      onRowClick={onRowClick}
+                      onRowDoubleClick={onRowDoubleClick}
+                      reorderable={reorderable}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            ) : (
+              tableRows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  onClick={() => onRowClick?.(row.original)}
+                  onDoubleClick={() => onRowDoubleClick?.(row.original)}
+                  className={cn(
+                    (onRowClick || onRowDoubleClick) && "cursor-pointer select-none"
+                  )}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )
           ) : (
             <TableRow className="hover:bg-transparent">
               <TableCell
@@ -101,7 +264,7 @@ export function DataTable<TData, TValue>({
               to{" "}
               {Math.min(
                 (table.getState().pagination.pageIndex + 1) *
-                  table.getState().pagination.pageSize,
+                table.getState().pagination.pageSize,
                 data.length,
               )}{" "}
               of{" "}

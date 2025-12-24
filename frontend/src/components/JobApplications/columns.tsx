@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { JobApplicationActionsMenu } from "./JobApplicationActionsMenu"
+import { AddToMyApplicationsButton } from "@/components/MyJobApplications/AddToMyApplicationsButton"
 
 function formatDate(dateString: string | null | undefined): string {
     if (!dateString) return "-"
@@ -191,8 +192,24 @@ export const columns: ColumnDef<JobApplicationPublic>[] = [
         },
     },
     {
+        id: "operation",
+        header: "操作",
+        cell: ({ row }) => (
+            <AddToMyApplicationsButton
+                data={{
+                    company: row.original.company_name,
+                    position: row.original.position || undefined,
+                    apply_url: row.original.apply_url || undefined,
+                    industry: row.original.industry || undefined,
+                    location: row.original.location || undefined,
+                    tags: row.original.tags || undefined,
+                }}
+            />
+        ),
+    },
+    {
         id: "actions",
-        header: () => <span className="sr-only">操作</span>,
+        header: () => <span className="sr-only">更多操作</span>,
         cell: ({ row }) => (
             <div className="flex justify-end">
                 <JobApplicationActionsMenu jobApplication={row.original} />

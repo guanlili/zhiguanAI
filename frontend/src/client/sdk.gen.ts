@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, ResumesReadResumesData, ResumesReadResumesResponse, ResumesCreateResumeData, ResumesCreateResumeResponse, ResumesReadResumeData, ResumesReadResumeResponse, ResumesUpdateResumeData, ResumesUpdateResumeResponse, ResumesDeleteResumeData, ResumesDeleteResumeResponse, ResumesParseResumeFileData, ResumesParseResumeFileResponse, ResumesOptimizeResumeData, ResumesOptimizeResumeResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, SoeReadRegulatoryUnitsData, SoeReadRegulatoryUnitsResponse, SoeCreateRegulatoryUnitData, SoeCreateRegulatoryUnitResponse, SoeReadRegulatoryUnitData, SoeReadRegulatoryUnitResponse, SoeUpdateRegulatoryUnitData, SoeUpdateRegulatoryUnitResponse, SoeDeleteRegulatoryUnitData, SoeDeleteRegulatoryUnitResponse, SoeReadEnterprisesData, SoeReadEnterprisesResponse, SoeCreateEnterpriseData, SoeCreateEnterpriseResponse, SoeReadEnterpriseData, SoeReadEnterpriseResponse, SoeUpdateEnterpriseData, SoeUpdateEnterpriseResponse, SoeDeleteEnterpriseData, SoeDeleteEnterpriseResponse, SoeImportSoeDataData, SoeImportSoeDataResponse, SoeGetSoeImportTemplateResponse, SoeGetEnterpriseCategoriesResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AnnouncementsReadAnnouncementsData, AnnouncementsReadAnnouncementsResponse, AnnouncementsCreateAnnouncementData, AnnouncementsCreateAnnouncementResponse, AnnouncementsReadAnnouncementData, AnnouncementsReadAnnouncementResponse, AnnouncementsUpdateAnnouncementData, AnnouncementsUpdateAnnouncementResponse, AnnouncementsDeleteAnnouncementData, AnnouncementsDeleteAnnouncementResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobApplicationsReadJobApplicationsData, JobApplicationsReadJobApplicationsResponse, JobApplicationsCreateJobApplicationData, JobApplicationsCreateJobApplicationResponse, JobApplicationsReadJobApplicationData, JobApplicationsReadJobApplicationResponse, JobApplicationsUpdateJobApplicationData, JobApplicationsUpdateJobApplicationResponse, JobApplicationsDeleteJobApplicationData, JobApplicationsDeleteJobApplicationResponse, JobApplicationsInitMockDataResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, MyJobApplicationsReadMyJobApplicationsData, MyJobApplicationsReadMyJobApplicationsResponse, MyJobApplicationsCreateMyJobApplicationData, MyJobApplicationsCreateMyJobApplicationResponse, MyJobApplicationsReadMyJobApplicationData, MyJobApplicationsReadMyJobApplicationResponse, MyJobApplicationsUpdateMyJobApplicationData, MyJobApplicationsUpdateMyJobApplicationResponse, MyJobApplicationsDeleteMyJobApplicationData, MyJobApplicationsDeleteMyJobApplicationResponse, PrivateCreateUserData, PrivateCreateUserResponse, ResumesReadResumesData, ResumesReadResumesResponse, ResumesCreateResumeData, ResumesCreateResumeResponse, ResumesReadResumeData, ResumesReadResumeResponse, ResumesUpdateResumeData, ResumesUpdateResumeResponse, ResumesDeleteResumeData, ResumesDeleteResumeResponse, ResumesParseResumeFileData, ResumesParseResumeFileResponse, ResumesOptimizeResumeData, ResumesOptimizeResumeResponse, SchedulerRunNowData, SchedulerRunNowResponse, SchedulerConfigureScheduleData, SchedulerConfigureScheduleResponse, SchedulerGetStatusResponse, SoeReadRegulatoryUnitsData, SoeReadRegulatoryUnitsResponse, SoeCreateRegulatoryUnitData, SoeCreateRegulatoryUnitResponse, SoeReadRegulatoryUnitData, SoeReadRegulatoryUnitResponse, SoeUpdateRegulatoryUnitData, SoeUpdateRegulatoryUnitResponse, SoeDeleteRegulatoryUnitData, SoeDeleteRegulatoryUnitResponse, SoeReadEnterprisesData, SoeReadEnterprisesResponse, SoeCreateEnterpriseData, SoeCreateEnterpriseResponse, SoeReadEnterpriseData, SoeReadEnterpriseResponse, SoeUpdateEnterpriseData, SoeUpdateEnterpriseResponse, SoeDeleteEnterpriseData, SoeDeleteEnterpriseResponse, SoeImportSoeDataData, SoeImportSoeDataResponse, SoeGetSoeImportTemplateResponse, SoeGetEnterpriseCategoriesResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class AnnouncementsService {
     /**
@@ -444,6 +444,117 @@ export class LoginService {
             url: '/api/v1/password-recovery-html-content/{email}',
             path: {
                 email: data.email
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class MyJobApplicationsService {
+    /**
+     * Read My Job Applications
+     * Retrieve user's job applications (我的进展).
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns UserJobApplicationsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readMyJobApplications(data: MyJobApplicationsReadMyJobApplicationsData = {}): CancelablePromise<MyJobApplicationsReadMyJobApplicationsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/my-job-applications/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create My Job Application
+     * Create a new job application for the current user.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns UserJobApplicationPublic Successful Response
+     * @throws ApiError
+     */
+    public static createMyJobApplication(data: MyJobApplicationsCreateMyJobApplicationData): CancelablePromise<MyJobApplicationsCreateMyJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/my-job-applications/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read My Job Application
+     * Get a specific job application for the current user.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns UserJobApplicationPublic Successful Response
+     * @throws ApiError
+     */
+    public static readMyJobApplication(data: MyJobApplicationsReadMyJobApplicationData): CancelablePromise<MyJobApplicationsReadMyJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/my-job-applications/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update My Job Application
+     * Update a job application for the current user.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns UserJobApplicationPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateMyJobApplication(data: MyJobApplicationsUpdateMyJobApplicationData): CancelablePromise<MyJobApplicationsUpdateMyJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/my-job-applications/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete My Job Application
+     * Delete a job application for the current user.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteMyJobApplication(data: MyJobApplicationsDeleteMyJobApplicationData): CancelablePromise<MyJobApplicationsDeleteMyJobApplicationResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/my-job-applications/{id}',
+            path: {
+                id: data.id
             },
             errors: {
                 422: 'Validation Error'

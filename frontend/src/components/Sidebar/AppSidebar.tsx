@@ -14,11 +14,12 @@ import { User } from "./User"
 
 const baseItems: Item[] = [
   { icon: Home, title: "Dashboard", path: "/" },
-  { icon: Briefcase, title: "Items", path: "/items" },
   { icon: FileText, title: "网申表格", path: "/job-applications" },
   { icon: Newspaper, title: "招聘简章", path: "/announcements" },
   { icon: Building2, title: "国央企扫盲", path: "/soe" },
   { icon: FileUser, title: "AI 改简历", path: "/resumes" },
+  { icon: Briefcase, title: "Items（测试预留）", path: "/items" },
+
 ]
 
 export function AppSidebar() {

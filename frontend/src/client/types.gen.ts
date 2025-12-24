@@ -440,6 +440,168 @@ export type UserCreate = {
     password: string;
 };
 
+export type UserJobApplicationCreate = {
+    /**
+     * 公司
+     */
+    company: string;
+    /**
+     * 投递链接
+     */
+    apply_url?: (string | null);
+    /**
+     * 重视度
+     */
+    priority?: (string | null);
+    /**
+     * 行业
+     */
+    industry?: (string | null);
+    /**
+     * 标签
+     */
+    tags?: (string | null);
+    /**
+     * 职位
+     */
+    position?: (string | null);
+    /**
+     * 地点
+     */
+    location?: (string | null);
+    /**
+     * 进展
+     */
+    progress?: (string | null);
+    /**
+     * 进展状态
+     */
+    status?: (string | null);
+    /**
+     * 进展时间
+     */
+    status_updated_at?: (string | null);
+    /**
+     * 备注
+     */
+    remarks?: (string | null);
+    /**
+     * 投递时间
+     */
+    applied_at?: (string | null);
+    /**
+     * 内推码
+     */
+    referral_code?: (string | null);
+    /**
+     * 链接2
+     */
+    apply_url2?: (string | null);
+    /**
+     * 链接3
+     */
+    apply_url3?: (string | null);
+    /**
+     * 排序
+     */
+    order?: (number | null);
+};
+
+export type UserJobApplicationPublic = {
+    /**
+     * 公司
+     */
+    company: string;
+    /**
+     * 投递链接
+     */
+    apply_url?: (string | null);
+    /**
+     * 重视度
+     */
+    priority?: (string | null);
+    /**
+     * 行业
+     */
+    industry?: (string | null);
+    /**
+     * 标签
+     */
+    tags?: (string | null);
+    /**
+     * 职位
+     */
+    position?: (string | null);
+    /**
+     * 地点
+     */
+    location?: (string | null);
+    /**
+     * 进展
+     */
+    progress?: (string | null);
+    /**
+     * 进展状态
+     */
+    status?: (string | null);
+    /**
+     * 进展时间
+     */
+    status_updated_at?: (string | null);
+    /**
+     * 备注
+     */
+    remarks?: (string | null);
+    /**
+     * 投递时间
+     */
+    applied_at?: (string | null);
+    /**
+     * 内推码
+     */
+    referral_code?: (string | null);
+    /**
+     * 链接2
+     */
+    apply_url2?: (string | null);
+    /**
+     * 链接3
+     */
+    apply_url3?: (string | null);
+    /**
+     * 排序
+     */
+    order?: (number | null);
+    id: string;
+    owner_id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type UserJobApplicationsPublic = {
+    data: Array<UserJobApplicationPublic>;
+    count: number;
+};
+
+export type UserJobApplicationUpdate = {
+    company?: (string | null);
+    apply_url?: (string | null);
+    priority?: (string | null);
+    industry?: (string | null);
+    tags?: (string | null);
+    position?: (string | null);
+    location?: (string | null);
+    progress?: (string | null);
+    status?: (string | null);
+    status_updated_at?: (string | null);
+    remarks?: (string | null);
+    applied_at?: (string | null);
+    referral_code?: (string | null);
+    apply_url2?: (string | null);
+    apply_url3?: (string | null);
+    order?: (number | null);
+};
+
 export type UserPublic = {
     email: string;
     is_active?: boolean;
@@ -603,6 +765,38 @@ export type LoginRecoverPasswordHtmlContentData = {
 };
 
 export type LoginRecoverPasswordHtmlContentResponse = (string);
+
+export type MyJobApplicationsReadMyJobApplicationsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type MyJobApplicationsReadMyJobApplicationsResponse = (UserJobApplicationsPublic);
+
+export type MyJobApplicationsCreateMyJobApplicationData = {
+    requestBody: UserJobApplicationCreate;
+};
+
+export type MyJobApplicationsCreateMyJobApplicationResponse = (UserJobApplicationPublic);
+
+export type MyJobApplicationsReadMyJobApplicationData = {
+    id: string;
+};
+
+export type MyJobApplicationsReadMyJobApplicationResponse = (UserJobApplicationPublic);
+
+export type MyJobApplicationsUpdateMyJobApplicationData = {
+    id: string;
+    requestBody: UserJobApplicationUpdate;
+};
+
+export type MyJobApplicationsUpdateMyJobApplicationResponse = (UserJobApplicationPublic);
+
+export type MyJobApplicationsDeleteMyJobApplicationData = {
+    id: string;
+};
+
+export type MyJobApplicationsDeleteMyJobApplicationResponse = (Message);
 
 export type PrivateCreateUserData = {
     requestBody: PrivateUserCreate;

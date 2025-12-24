@@ -46,6 +46,7 @@ class User(UserBase, table=True):
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
     resumes: list["Resume"] = Relationship(back_populates="owner", cascade_delete=True)
+    user_job_applications: list["UserJobApplication"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -165,6 +166,72 @@ class JobApplicationPublic(JobApplicationBase):
 
 class JobApplicationsPublic(SQLModel):
     data: list[JobApplicationPublic]
+    count: int
+
+
+# =============== User Job Application (My Progress) Models ===============
+
+class UserJobApplicationBase(SQLModel):
+    company: str = Field(max_length=255, description="公司")
+    apply_url: str | None = Field(default=None, max_length=1024, description="投递链接")
+    priority: str | None = Field(default=None, max_length=50, description="重视度")
+    industry: str | None = Field(default=None, max_length=100, description="行业")
+    tags: str | None = Field(default=None, max_length=500, description="标签")
+    position: str | None = Field(default=None, max_length=255, description="职位")
+    location: str | None = Field(default=None, max_length=255, description="地点")
+    progress: str | None = Field(default=None, max_length=1024, description="进展")
+    status: str | None = Field(default="未投递", max_length=100, description="进展状态")
+    status_updated_at: datetime | None = Field(default=None, description="进展时间")
+    remarks: str | None = Field(default=None, max_length=2048, description="备注")
+    applied_at: datetime | None = Field(default=None, description="投递时间")
+    referral_code: str | None = Field(default=None, max_length=100, description="内推码")
+    apply_url2: str | None = Field(default=None, max_length=1024, description="链接2")
+    apply_url3: str | None = Field(default=None, max_length=1024, description="链接3")
+    order: int | None = Field(default=0, description="排序")
+
+
+class UserJobApplicationCreate(UserJobApplicationBase):
+    pass
+
+
+class UserJobApplicationUpdate(SQLModel):
+    company: str | None = Field(default=None, max_length=255)
+    apply_url: str | None = Field(default=None, max_length=1024)
+    priority: str | None = Field(default=None, max_length=50)
+    industry: str | None = Field(default=None, max_length=100)
+    tags: str | None = Field(default=None, max_length=500)
+    position: str | None = Field(default=None, max_length=255)
+    location: str | None = Field(default=None, max_length=255)
+    progress: str | None = Field(default=None, max_length=1024)
+    status: str | None = Field(default=None, max_length=100)
+    status_updated_at: datetime | None = None
+    remarks: str | None = Field(default=None, max_length=2048)
+    applied_at: datetime | None = None
+    referral_code: str | None = Field(default=None, max_length=100)
+    apply_url2: str | None = Field(default=None, max_length=1024)
+    apply_url3: str | None = Field(default=None, max_length=1024)
+    order: int | None = None
+
+
+class UserJobApplication(UserJobApplicationBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    owner_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User | None = Relationship(back_populates="user_job_applications")
+
+
+class UserJobApplicationPublic(UserJobApplicationBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+
+
+class UserJobApplicationsPublic(SQLModel):
+    data: list[UserJobApplicationPublic]
     count: int
 
 
