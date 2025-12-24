@@ -16,7 +16,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { format } from "date-fns"
 
 const EditableCell = ({
     value: initialValue,
@@ -25,6 +24,7 @@ const EditableCell = ({
     table,
     type = "text",
     options = [],
+    customRender,
 }: any) => {
     const [value, setValue] = useState(initialValue)
     const [isEditing, setIsEditing] = useState(false)
@@ -116,8 +116,18 @@ const EditableCell = ({
     }
 
     const displayValue = () => {
+        if (customRender) return customRender(initialValue)
         if (!initialValue) return <span className="text-muted-foreground/30 italic text-[10px]">双击编辑...</span>
-        if (type === "date") return format(new Date(initialValue), "yyyy-MM-dd")
+
+        const str = String(initialValue).trim()
+
+        // Find YYYY-MM-DD pattern anywhere in the string
+        const match = str.match(/(\d{4}-\d{2}-\d{2})/)
+
+        if (type === "date" || match) {
+            return match ? match[1] : str.substring(0, 10)
+        }
+
         return initialValue
     }
 
@@ -201,9 +211,11 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
         accessorKey: "company",
         header: "公司",
         cell: (props) => (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full min-w-0">
                 <Building2 className="size-4 text-primary shrink-0" />
-                <EditableCell value={props.getValue()} {...props} />
+                <div className="flex-1 min-w-0">
+                    <EditableCell value={props.getValue()} {...props} />
+                </div>
             </div>
         ),
     },
@@ -211,9 +223,11 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
         accessorKey: "position",
         header: "职位",
         cell: (props) => (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 w-full min-w-0">
                 <Briefcase className="size-3 text-muted-foreground shrink-0" />
-                <EditableCell value={props.getValue()} {...props} />
+                <div className="flex-1 min-w-0">
+                    <EditableCell value={props.getValue()} {...props} />
+                </div>
             </div>
         ),
     },
@@ -222,6 +236,7 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
         header: "进展状态",
         cell: (props) => (
             <EditableCell
+                value={props.getValue()}
                 {...props}
                 type="select"
                 options={[
@@ -233,7 +248,7 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
                     { label: "感谢信", value: "感谢信" },
                     { label: "已结束", value: "已结束" },
                 ]}
-                renderValue={(val: string) => <StatusBadge status={val} />}
+                customRender={(val: string) => <StatusBadge status={val} />}
             />
         ),
     },
@@ -242,6 +257,7 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
         header: "重视度",
         cell: (props) => (
             <EditableCell
+                value={props.getValue()}
                 {...props}
                 type="select"
                 options={[
@@ -249,7 +265,7 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
                     { label: "中", value: "中" },
                     { label: "低", value: "低" },
                 ]}
-                renderValue={(val: string) => <PriorityBadge priority={val} />}
+                customRender={(val: string) => <PriorityBadge priority={val} />}
             />
         ),
     },
@@ -268,7 +284,7 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
         cell: (props) => (
             <div className="flex items-center gap-1 text-xs text-muted-foreground whitespace-nowrap">
                 <Clock className="size-3" />
-                <EditableCell {...props} type="date" />
+                <EditableCell value={props.getValue()} {...props} type="date" />
             </div>
         ),
     },

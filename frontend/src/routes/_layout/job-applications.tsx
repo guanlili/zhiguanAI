@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { FileText, Trash2, Download, Plus, Database, RefreshCw } from "lucide-react"
+import { Trash2, Download, Plus, Database, RefreshCw, Search } from "lucide-react"
 import { Suspense, useState, useCallback } from "react"
 import * as XLSX from "xlsx"
 
@@ -10,6 +10,7 @@ import { columns as catalogColumns } from "@/components/JobApplications/columns"
 import { columns as myColumns } from "@/components/MyJobApplications/columns"
 import PendingJobApplications from "@/components/Pending/PendingJobApplications"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/_layout/job-applications")({
     component: JobApplications,
 })
 
-function CatalogTable() {
+function CatalogTable({ filter }: { filter: string }) {
     const { data: jobApplications } = useSuspenseQuery(getJobApplicationsQueryOptions())
 
     if (jobApplications.data.length === 0) {
@@ -52,7 +53,11 @@ function CatalogTable() {
 
     return (
         <div className="px-2 pb-2">
-            <DataTable columns={catalogColumns} data={jobApplications.data} />
+            <DataTable
+                columns={catalogColumns}
+                data={jobApplications.data}
+                globalFilter={filter}
+            />
         </div>
     )
 }
@@ -94,6 +99,8 @@ function JobApplications() {
     const { data: myApplications } = useSuspenseQuery(getMyJobApplicationsQueryOptions())
 
     const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({})
+    const [catalogFilter, setCatalogFilter] = useState("")
+    const [myFilter, setMyFilter] = useState("")
 
     const selectedIds = Object.keys(rowSelection).filter(id => rowSelection[id])
 
@@ -198,12 +205,23 @@ function JobApplications() {
 
                 <TabsContent value="catalog" className="m-0 space-y-4">
                     <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
-                        <div className="px-4 py-3 border-b bg-muted/30 flex justify-between items-center">
-                            <span className="text-sm font-medium">全库招聘信息</span>
+                        <div className="px-4 py-3 border-b bg-muted/30 flex flex-wrap justify-between items-center gap-4">
+                            <div className="flex items-center gap-3">
+                                <span className="text-sm font-medium">全库招聘信息</span>
+                                <div className="relative w-64">
+                                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        placeholder="搜索地点..."
+                                        className="pl-8 h-8 text-xs"
+                                        value={catalogFilter}
+                                        onChange={(e) => setCatalogFilter(e.target.value)}
+                                    />
+                                </div>
+                            </div>
                             <InitMockDataButton />
                         </div>
                         <Suspense fallback={<PendingJobApplications />}>
-                            <CatalogTable />
+                            <CatalogTable filter={catalogFilter} />
                         </Suspense>
                     </div>
                 </TabsContent>
@@ -245,6 +263,15 @@ function JobApplications() {
                                 )}
                             </div>
                             <div className="flex items-center gap-2">
+                                <div className="relative w-48 mr-2">
+                                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        placeholder="搜索地点..."
+                                        className="pl-8 h-8 text-xs font-normal border-dashed"
+                                        value={myFilter}
+                                        onChange={(e) => setMyFilter(e.target.value)}
+                                    />
+                                </div>
                                 <Button
                                     variant="outline"
                                     size="sm"
@@ -268,6 +295,7 @@ function JobApplications() {
                                     reorderable
                                     onReorder={(newData) => reorderMutation.mutate(newData)}
                                     updateData={updateData}
+                                    globalFilter={myFilter}
                                 />
                             </div>
                         </Suspense>

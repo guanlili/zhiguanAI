@@ -3,6 +3,7 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 import {
@@ -61,6 +62,8 @@ interface DataTableProps<TData, TValue> {
   reorderable?: boolean
   onReorder?: (data: TData[]) => void
   updateData?: (rowIndex: number, columnId: string, value: any) => void
+  globalFilter?: string
+  onGlobalFilterChange?: (value: string) => void
 }
 
 function DraggableTableRow<TData>({
@@ -135,16 +138,21 @@ export function DataTable<TData, TValue>({
   reorderable,
   onReorder,
   updateData,
+  globalFilter,
+  onGlobalFilterChange,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange,
+    onGlobalFilterChange,
     getRowId,
     state: {
       rowSelection,
+      globalFilter,
     },
     meta: {
       updateData,
@@ -177,81 +185,89 @@ export function DataTable<TData, TValue>({
 
   const tableRows = table.getRowModel().rows
 
+  const tableComponent = (
+    <Table>
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id} className="hover:bg-transparent">
+            {headerGroup.headers.map((header) => {
+              return (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                </TableHead>
+              )
+            })}
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {tableRows.length ? (
+          reorderable ? (
+            <SortableContext
+              items={tableRows.map((row) => row.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {tableRows.map((row) => (
+                <DraggableTableRow
+                  key={row.id}
+                  row={row}
+                  onRowClick={onRowClick}
+                  onRowDoubleClick={onRowDoubleClick}
+                  reorderable={reorderable}
+                />
+              ))}
+            </SortableContext>
+          ) : (
+            tableRows.map((row) => (
+              <TableRow
+                key={row.id}
+                onClick={() => onRowClick?.(row.original)}
+                onDoubleClick={() => onRowDoubleClick?.(row.original)}
+                className={cn(
+                  (onRowClick || onRowDoubleClick) && "cursor-pointer select-none"
+                )}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          )
+        ) : (
+          <TableRow className="hover:bg-transparent">
+            <TableCell
+              colSpan={columns.length}
+              className="h-32 text-center text-muted-foreground"
+            >
+              No results found.
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  )
+
   return (
     <div className="flex flex-col gap-4">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="hover:bg-transparent">
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {tableRows.length ? (
-            reorderable ? (
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                modifiers={[restrictToVerticalAxis]}
-                onDragEnd={handleDragEnd}
-              >
-                <SortableContext
-                  items={tableRows.map((row) => row.id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {tableRows.map((row) => (
-                    <DraggableTableRow
-                      key={row.id}
-                      row={row}
-                      onRowClick={onRowClick}
-                      onRowDoubleClick={onRowDoubleClick}
-                      reorderable={reorderable}
-                    />
-                  ))}
-                </SortableContext>
-              </DndContext>
-            ) : (
-              tableRows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  onClick={() => onRowClick?.(row.original)}
-                  onDoubleClick={() => onRowDoubleClick?.(row.original)}
-                  className={cn(
-                    (onRowClick || onRowDoubleClick) && "cursor-pointer select-none"
-                  )}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            )
-          ) : (
-            <TableRow className="hover:bg-transparent">
-              <TableCell
-                colSpan={columns.length}
-                className="h-32 text-center text-muted-foreground"
-              >
-                No results found.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      {reorderable ? (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          modifiers={[restrictToVerticalAxis]}
+          onDragEnd={handleDragEnd}
+        >
+          {tableComponent}
+        </DndContext>
+      ) : (
+        tableComponent
+      )}
 
       {table.getPageCount() > 1 && (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 border-t bg-muted/20">
