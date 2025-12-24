@@ -25,6 +25,7 @@ const EditableCell = ({
     type = "text",
     options = [],
     customRender,
+    noTruncate = false,
 }: any) => {
     const [value, setValue] = useState(initialValue)
     const [isEditing, setIsEditing] = useState(false)
@@ -134,9 +135,12 @@ const EditableCell = ({
     return (
         <div
             onDoubleClick={() => setIsEditing(true)}
-            className="w-full min-w-[50px] min-h-[1.5rem] flex items-center cursor-text hover:bg-muted/50 rounded px-1 -mx-1 transition-colors overflow-hidden"
+            className={cn(
+                "w-full min-w-[50px] min-h-[1.5rem] flex items-center cursor-text hover:bg-muted/50 rounded px-1 -mx-1 transition-colors",
+                !noTruncate && "overflow-hidden"
+            )}
         >
-            <div className="truncate w-full text-sm">
+            <div className={cn("w-full text-sm", !noTruncate && "truncate")}>
                 {displayValue()}
             </div>
         </div>
@@ -214,7 +218,7 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
             <div className="flex items-center gap-2 w-full min-w-0">
                 <Building2 className="size-4 text-primary shrink-0" />
                 <div className="flex-1 min-w-0">
-                    <EditableCell value={props.getValue()} {...props} />
+                    <EditableCell value={props.getValue()} {...props} noTruncate />
                 </div>
             </div>
         ),
@@ -226,7 +230,7 @@ export const columns: ColumnDef<UserJobApplicationPublic>[] = [
             <div className="flex items-center gap-1 w-full min-w-0">
                 <Briefcase className="size-3 text-muted-foreground shrink-0" />
                 <div className="flex-1 min-w-0">
-                    <EditableCell value={props.getValue()} {...props} />
+                    <EditableCell value={props.getValue()} {...props} noTruncate />
                 </div>
             </div>
         ),

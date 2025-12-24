@@ -42,7 +42,38 @@ export const Route = createFileRoute("/_layout/resumes/$resumeId")({
 })
 
 const SUGGESTED_ROLES = [
-    "软件开发", "产品经理", "数据分析师", "运营专员", "UI设计师", "销售代表", "会计", "HR"
+    {
+        title: "软件开发",
+        jd: "1. 负责软件系统或模块的设计、编码及测试工作；\n2. 参与需求分析，编写相关技术文档；\n3. 负责代码优化和系统性能调优，解决技术难题；\n4. 协助团队完成项目的迭代开发与维护。"
+    },
+    {
+        title: "产品经理",
+        jd: "1. 负责产品的全生命周期管理，包括需求调研、原型设计及 PRD 编写；\n2. 协调研发、设计、市场等部门，确保产品按时保质上线；\n3. 持续跟踪产品数据和用户反馈，分析竞品，制定产品迭代计划；\n4. 负责用户体验优化，提升产品核心指标。"
+    },
+    {
+        title: "数据分析师",
+        jd: "1. 负责业务数据的收集、清洗、建模和分析工作；\n2. 深入挖掘数据背后的业务逻辑，产出高质量的分析报告；\n3. 建立并优化指标体系，监控核心业务数据的变化；\n4. 为业务决策提供量化的参考依据，驱动业务增长。"
+    },
+    {
+        title: "运营专员",
+        jd: "1. 负责平台的日常内容运营、活动策划及执行，提高用户活跃度；\n2. 监控核心运营数据，分析用户行为，持续优化运营策略；\n3. 管理用户社群，处理用户反馈，维护良好的用户关系；\n4. 配合市场推广，提升品牌知名度及用户转化率。"
+    },
+    {
+        title: "UI设计师",
+        jd: "1. 负责移动端及 Web 端产品的界面视觉设计与设计规范制定；\n2. 参与产品前期规划，配合产品及交互完成原型落地；\n3. 跟踪最新设计趋势，对产品进行视觉重构或体验升级；\n4. 负责设计稿的切图与标注，跟进研发还原度，保证产品质量。"
+    },
+    {
+        title: "销售代表",
+        jd: "1. 负责新客户的开拓与老客户的维护，建立良好的长期合作关系；\n2. 根据公司的销售目标，制定销售计划并达成业绩指标；\n3. 深入了解客户需求，提供专业的方案建议与产品介绍；\n4. 收集市场信息及竞品动态，及时向团队反馈并优化销售话术。"
+    },
+    {
+        title: "会计",
+        jd: "1. 负责公司的日常账务处理，包括收支核算、报销审核及记账；\n2. 编制财务报表，确保数据的真实性和准确性，按时完成税务申报；\n3. 协助进行成本核算与分析，参与公司的预算制定与执行监控；\n4. 负责财务档案的管理，确保公司财会工作的合规性。"
+    },
+    {
+        title: "HR",
+        jd: "1. 负责招聘全流程管理，包括职位发布、简历筛选、面试约见及入职跟进；\n2. 维护员工关系，办理入职、转正、调动、离职等相关手续；\n3. 参与企业文化建设、绩效管理及薪酬福利体系的优化工作；\n4. 协助进行组织架构设计及各项行政管理事务。"
+    }
 ]
 
 function ResumeEditPage() {
@@ -424,18 +455,19 @@ function ResumeEditPage() {
                         <div className="mt-4 shrink-0">
                             <p className="text-xs text-muted-foreground mb-2">热门岗位快速填充：</p>
                             <div className="flex flex-wrap gap-2 max-h-20 overflow-y-auto content-start scrollbar-none">
-                                {SUGGESTED_ROLES.map(role => (
+                                {SUGGESTED_ROLES.map(item => (
                                     <Badge
-                                        key={role}
+                                        key={item.title}
                                         variant="outline"
                                         className="cursor-pointer hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-colors py-1 px-2.5 font-normal text-xs bg-background/50"
                                         onClick={() => {
-                                            setTargetPosition(role)
+                                            setTargetPosition(item.title)
+                                            setJd(item.jd)
                                             setIsDirty(true)
-                                            // Optional: update JD with some template if needed, but here we just set position
+                                            updateMutation.mutate({ target_role: item.title, target_jd: item.jd })
                                         }}
                                     >
-                                        {role}
+                                        {item.title}
                                     </Badge>
                                 ))}
                             </div>
